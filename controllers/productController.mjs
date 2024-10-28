@@ -9,7 +9,12 @@ function getProducts(req, res) {
 function getProduct(req, res) {
   // Get product from db with id from params
   const product = db.getProduct(req.params.id);
-  res.render('products/product', { title: 'A singular product', product });
+  const categories = db.getAllCategoriesForProduct(req.params.id);
+  res.render('products/product', {
+    title: 'A singular product',
+    product,
+    categories,
+  });
 }
 
 function getNewProductForm(req, res) {

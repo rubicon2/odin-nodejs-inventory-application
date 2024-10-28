@@ -3,6 +3,7 @@ import 'dotenv/config';
 
 import productRouter from './routes/productRouter.mjs';
 import manufacturerRouter from './routes/manufacturerRouter.mjs';
+import categoryRouter from './routes/categoryRouter.mjs';
 
 const PORT = process.env.PORT || 8000;
 
@@ -12,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/product', productRouter);
 app.use('/manufacturer', manufacturerRouter);
+app.use('/category', categoryRouter);
 
 app.get('/', (req, res) => {
   res.render('index', {

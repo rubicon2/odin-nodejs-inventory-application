@@ -6,6 +6,16 @@
   <p><%= product.price %></p>
   <p><%= product.description %></p>
   <p><%= product.available ? 'In Stock' : 'Out of Stock' %></p>
+  <% if (locals.categories != null && categories.length > 0) { %>
+    <h2>Categories</h2>
+    <ul>
+      <% categories.forEach((category) => { %>
+        <a href="/category/<%= category.id %>">
+          <li><%= category.name %></li>
+        </a>
+      <% }); %>
+    </ul>
+  <% }; %>
   <a href="/product/<%= product.id %>/edit">Edit product</a>
   <a href="/product/<%= product.id %>/delete">Delete product</a>
 </body>
