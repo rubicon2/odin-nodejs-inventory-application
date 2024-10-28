@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs') %>
+<body>
+  <h1>Products!</h1>
+  <ul>
+    <% products.forEach((product) => { %> 
+      <li>
+        <%- include('./productListProduct.ejs', {product}) %>
+      </li>
+    <% }) %>
+  </ul>
+  <a href="/product/new">Add a new product</a>
+</body>
+</html>

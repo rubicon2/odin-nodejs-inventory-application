@@ -1,10 +1,15 @@
 import express from 'express';
 import 'dotenv/config';
 
+import productRouter from './routes/productRouter.mjs';
+
 const PORT = process.env.PORT || 8000;
 
 const app = express();
 app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/product', productRouter);
 
 app.get('/', (req, res) => {
   res.render('index', {

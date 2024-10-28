@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs') %>
+<body>
+  <h1><%= product.name %></h1>
+  <p><%= product.price %></p>
+  <p><%= product.description %></p>
+  <p><%= product.available ? 'In Stock' : 'Out of Stock' %></p>
+  <a href="/product/<%= product.id %>/edit">Edit product</a>
+  <a href="/product/<%= product.id %>/delete">Delete product</a>
+</body>
+</html>
