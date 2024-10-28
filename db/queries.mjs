@@ -13,7 +13,7 @@ let products = {
   },
   1: {
     id: 1,
-    name: 'SG',
+    name: 'SG Bass',
     available: true,
     price: 99.99,
     description: 'Mega guitar',
