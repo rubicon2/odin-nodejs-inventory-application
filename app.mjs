@@ -2,6 +2,7 @@ import express from 'express';
 import 'dotenv/config';
 
 import productRouter from './routes/productRouter.mjs';
+import manufacturerRouter from './routes/manufacturerRouter.mjs';
 
 const PORT = process.env.PORT || 8000;
 
@@ -10,6 +11,7 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/product', productRouter);
+app.use('/manufacturer', manufacturerRouter);
 
 app.get('/', (req, res) => {
   res.render('index', {

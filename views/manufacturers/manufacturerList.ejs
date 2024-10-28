@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs') %>
+  <body>
+    <h1>Manufacturers!</h1>
+    <ul>
+      <% manufacturers.forEach((manufacturer)=> { %>
+        <li>
+          <%- include('./manufacturerListManufacturer.ejs', {manufacturer}) %>
+        </li>
+        <% }) %>
+    </ul>
+    <a href="/manufacturer/new">Add a new manufacturer</a>
+  </body>
+
+</html>

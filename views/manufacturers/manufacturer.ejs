@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs') %>
+<body>
+  <h1><%= manufacturer.name %></h1>
+  <p><%= manufacturer.description %></p>
+  <a href="/manufacturer/<%= manufacturer.id %>/edit">Edit manufacturer</a>
+</body>
+</html>

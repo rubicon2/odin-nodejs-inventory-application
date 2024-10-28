@@ -1,0 +1,4 @@
+<label for="name">Name: </label>
+<input type="text" name="name" id="name" required value="<%= locals.manufacturer != null ? manufacturer.name : '' %>">
+<label for="description">Description: </label>
+<textarea name="description" id="description"><%= locals.manufacturer != null ? manufacturer.description : '' %></textarea>
