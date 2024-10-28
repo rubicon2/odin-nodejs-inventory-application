@@ -7,7 +7,27 @@ const app = express();
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
-  res.send('Hello, world!');
+  res.render('index', {
+    title: 'Hello, world!',
+    products: [
+      {
+        id: 0,
+        name: 'Strat',
+        available: true,
+        price: 99.99,
+        description: 'Mega guitar',
+        img: '/default.jpg',
+      },
+      {
+        id: 1,
+        name: 'Tele',
+        available: true,
+        price: 99.99,
+        description: 'Mega guitar',
+        img: '/default.jpg',
+      },
+    ],
+  });
 });
 
 // If no prior routes have been matched, show 404.
