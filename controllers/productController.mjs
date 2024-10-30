@@ -20,14 +20,26 @@ function getProduct(req, res) {
 function getNewProductForm(req, res) {
   // Get list of manufacturers from database to populate dropdown list in form.
   const manufacturers = db.getAllManufacturers();
-  res.render('products/newProduct', { title: 'New product', manufacturers });
+  const categories = db.getAllCategories();
+  res.render('products/newProduct', {
+    title: 'New product',
+    manufacturers,
+    categories,
+  });
 }
 
 function postNewProductForm(req, res) {
-  const { name, manufacturer_id, price, description, available, img } =
-    req.body;
+  const {
+    name,
+    manufacturer_id,
+    price,
+    description,
+    available,
+    img,
+    category_ids,
+  } = req.body;
   // Add to database.
-  db.addProduct({
+  const product = db.addProduct({
     name,
     manufacturer_id,
     price,
@@ -35,6 +47,7 @@ function postNewProductForm(req, res) {
     available,
     img,
   });
+  db.addCategoriesForProduct(product.id, category_ids);
   res.status(303).redirect('/product');
 }
 
@@ -42,17 +55,30 @@ function getEditProductForm(req, res) {
   const product = db.getProduct(req.params.id);
   // Get list of manufacturers from database to populate dropdown list in form.
   const manufacturers = db.getAllManufacturers();
+  const categories = db.getAllCategories();
+  const selectedCategoryIds = db
+    .getAllCategoriesForProduct(req.params.id)
+    .map((category) => category.id);
   res.render(`products/editProduct`, {
     title: 'Edit product',
     product,
     manufacturers,
+    categories,
+    selectedCategoryIds,
   });
 }
 
 function postEditProductForm(req, res) {
   const id = req.params.id;
-  const { name, manufacturer_id, price, description, available, img } =
-    req.body;
+  const {
+    name,
+    manufacturer_id,
+    price,
+    description,
+    available,
+    img,
+    category_ids,
+  } = req.body;
   db.updateProduct(id, {
     id,
     name,
@@ -62,6 +88,7 @@ function postEditProductForm(req, res) {
     available: available === 'on' ? true : false,
     img,
   });
+  db.updateCategoriesForProduct(id, category_ids);
   res.status(303).redirect('/product');
 }
 

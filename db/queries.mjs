@@ -27,10 +27,12 @@ let manufacturers = {
   0: {
     id: 0,
     name: 'Fender',
+    img_url: '',
   },
   1: {
     id: 1,
     name: 'Gibson',
+    img_url: '',
   },
 };
 
@@ -98,6 +100,7 @@ function addProduct(product) {
     id,
     ...product,
   };
+  return products[id];
 }
 
 function updateProduct(id, updates) {
@@ -125,6 +128,7 @@ function addManufacturer(manufacturer) {
     id,
     ...manufacturer,
   };
+  return manufacturers[id];
 }
 
 function updateManufacturer(id, updates) {
@@ -148,6 +152,7 @@ function addCategory(category) {
     id,
     ...category,
   };
+  return categories[id];
 }
 
 function updateCategory(id, updates) {
@@ -172,10 +177,41 @@ function getAllProductCategories() {
   return Array.from(Object.values(products_to_categories));
 }
 
+function getAllProductToCategoryRowsForProduct(id) {
+  return getAllProductCategories().filter((row) => row.product_id == id);
+}
+
 function getAllCategoriesForProduct(id) {
-  return getAllProductCategories()
-    .filter((row) => row.product_id == id)
-    .map((row) => categories[row.category_id]);
+  return getAllProductToCategoryRowsForProduct(id).map(
+    (row) => categories[row.category_id],
+  );
+}
+
+function addCategoriesForProduct(product_id, category_ids) {
+  // If no category ids are selected, the parameter will be null, and
+  // we will want to return an empty array.
+  if (!category_ids) return [];
+  const added_rows = [];
+  for (const category_id of category_ids) {
+    const id = getNextId(products_to_categories);
+    products_to_categories[id] = {
+      id,
+      product_id: parseInt(product_id),
+      category_id: parseInt(category_id),
+    };
+    added_rows.push(products_to_categories[id]);
+  }
+  return added_rows;
+}
+
+function updateCategoriesForProduct(product_id, category_ids) {
+  // Delete all existing categories linked to this product.
+  const existingRows = getAllProductToCategoryRowsForProduct(product_id);
+  for (const existingRow of existingRows) {
+    delete products_to_categories[existingRow.id];
+  }
+  // Create new entries.
+  addCategoriesForProduct(product_id, category_ids);
 }
 
 function getAllProductsInCategory(id) {
@@ -205,6 +241,9 @@ export {
   updateCategory,
   deleteCategory,
   getAllProductCategories,
+  getAllProductToCategoryRowsForProduct,
   getAllCategoriesForProduct,
+  addCategoriesForProduct,
+  updateCategoriesForProduct,
   getAllProductsInCategory,
 };

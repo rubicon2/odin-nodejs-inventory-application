@@ -14,3 +14,8 @@
 <input type="checkbox" name="available" id="available" <%- locals.product != null && !product.available ? '' : 'checked' %>>
 <label for="img">Image: </label>
 <input type="file" name="img" id="img" value="<%= locals.product != null ? product.img : '' %>">
+<select name="category_ids" id="category_ids" multiple>
+  <% categories.forEach((category) => { %>
+    <option value="<%= category.id %>" <%- locals.product != null && selectedCategoryIds.includes(category.id) ? 'selected' : '' %>><%= category.name %></option>
+  <% }); %>
+</select>
