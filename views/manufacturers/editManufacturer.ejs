@@ -1,4 +1,4 @@
-<form action="/manufacturer/<%= manufacturer.id %>/edit" method="post">
+<form action="/manufacturer/<%= manufacturer.id %>/edit" method="post" enctype="multipart/form-data">
   <%- include('./manufacturerFormFields.ejs') %>
   <button type="submit">Submit</button>
 </form>

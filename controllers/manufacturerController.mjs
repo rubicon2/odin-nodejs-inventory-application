@@ -1,4 +1,5 @@
 import * as db from '../db/queries.mjs';
+import fs from 'node:fs/promises';
 
 function getManufacturers(req, res) {
   // Get manufacturers from db
@@ -24,10 +25,12 @@ function getNewManufacturerForm(req, res) {
 
 function postNewManufacturerForm(req, res) {
   const { name, description } = req.body;
+  const img_url = req.file.path;
   // Add to database.
   db.addManufacturer({
     name,
     description,
+    img_url,
   });
   res.status(303).redirect('/manufacturer');
 }
@@ -44,8 +47,13 @@ function getEditManufacturerForm(req, res) {
 
 function postEditManufacturerForm(req, res) {
   const id = req.params.id;
+  // Delete previous logo file.
+  const { img_url: previous_img_url } = db.getManufacturer(id);
+  fs.unlink(previous_img_url).catch((error) => console.error(error));
+  // Update with the new details.
   const { name, description } = req.body;
-  db.updateManufacturer(id, { id, name, description });
+  const img_url = req.file.path;
+  db.updateManufacturer(id, { id, name, description, img_url });
   res.status(303).redirect('/manufacturer');
 }
 
