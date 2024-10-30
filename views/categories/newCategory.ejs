@@ -1,4 +1,10 @@
-<form action="/category/new" method="post">
-  <%- include('./categoryFormFields.ejs') %>
-  <button type="submit">Submit</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs') %>
+  <body>
+    <form action="/category/new" method="post">
+      <%- include('./categoryFormFields.ejs') %>
+        <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>

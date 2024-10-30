@@ -1,4 +1,10 @@
-<form action="/manufacturer/<%= manufacturer.id %>/edit" method="post" enctype="multipart/form-data">
-  <%- include('./manufacturerFormFields.ejs') %>
-  <button type="submit">Submit</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs') %>
+  <body>
+    <form action="/manufacturer/<%= manufacturer.id %>/edit" method="post" enctype="multipart/form-data">
+      <%- include('./manufacturerFormFields.ejs') %>
+        <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>
