@@ -265,7 +265,7 @@ function deleteProductImage(id) {
 
 function getNextId(obj) {
   const arr = Array.from(Object.values(obj)).sort((a, b) => a.id - b.id);
-  return arr[arr.length - 1].id + 1;
+  return arr.length == 0 ? 0 : arr[arr.length - 1].id + 1;
 }
 
 export {
