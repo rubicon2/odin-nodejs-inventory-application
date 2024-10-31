@@ -48,6 +48,8 @@ function postNewProductForm(req, res) {
     img,
   });
   db.addCategoriesForProduct(product.id, category_ids);
+  const img_files = req.files;
+  db.addProductImages(product.id, img_files);
   res.status(303).redirect('/product');
 }
 
@@ -59,10 +61,12 @@ function getEditProductForm(req, res) {
   const selectedCategoryIds = db
     .getAllCategoriesForProduct(req.params.id)
     .map((category) => category.id);
+  const images = db.getAllImagesForProduct(req.params.id);
   res.render(`products/editProduct`, {
     title: 'Edit product',
     product,
     manufacturers,
+    images,
     categories,
     selectedCategoryIds,
   });
@@ -89,6 +93,8 @@ function postEditProductForm(req, res) {
     img,
   });
   db.updateCategoriesForProduct(id, category_ids);
+  const img_files = req.files;
+  db.addProductImages(id, img_files);
   res.status(303).redirect('/product');
 }
 

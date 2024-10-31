@@ -86,6 +86,8 @@ let products_to_categories = {
   },
 };
 
+let product_images = {};
+
 function getAllProducts() {
   return Array.from(Object.values(products));
 }
@@ -220,6 +222,47 @@ function getAllProductsInCategory(id) {
     .map((row) => products[row.product_id]);
 }
 
+function getAllProductImages() {
+  return Array.from(Object.values(product_images));
+}
+
+function getAllImagesForProduct(id) {
+  return Array.from(Object.values(product_images)).filter(
+    (row) => row.product_id == id,
+  );
+}
+
+function addProductImage(product_id, image) {
+  const id = getNextId(product_images);
+  const { path: img_url } = image;
+  product_images[id] = {
+    id,
+    product_id,
+    img_url,
+  };
+  return product_images[id];
+}
+
+function addProductImages(id, images) {
+  if (!images) return [];
+  const added_rows = [];
+  for (const image of images) {
+    added_rows.push(addProductImage(id, image));
+  }
+  return added_rows;
+}
+
+function updateProductImage(id, updates) {
+  product_images[id] = {
+    ...product_images[id],
+    ...updates,
+  };
+}
+
+function deleteProductImage(id) {
+  delete product_images[id];
+}
+
 function getNextId(obj) {
   const arr = Array.from(Object.values(obj)).sort((a, b) => a.id - b.id);
   return arr[arr.length - 1].id + 1;
@@ -246,4 +289,10 @@ export {
   addCategoriesForProduct,
   updateCategoriesForProduct,
   getAllProductsInCategory,
+  getAllProductImages,
+  getAllImagesForProduct,
+  addProductImage,
+  addProductImages,
+  updateProductImage,
+  deleteProductImage,
 };
