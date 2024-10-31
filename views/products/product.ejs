@@ -7,6 +7,16 @@
     <p><%= product.price %></p>
     <p><%= product.description %></p>
     <p><%= product.available ? 'In Stock' : 'Out of Stock' %></p>
+    <% if (locals.images != null && images.length > 0) { %>
+      <h2>Images</h2>
+      <ul>
+        <% images.forEach((image) => { %>
+          <li>
+            <img src="/<%= image.img_url %>" alt="">
+          </li>
+        <% }); %>
+      </ul>
+    <% } %>
     <% if (locals.categories != null && categories.length > 0) { %>
       <h2>Categories</h2>
       <ul>

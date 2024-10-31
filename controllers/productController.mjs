@@ -10,10 +10,12 @@ function getProduct(req, res) {
   // Get product from db with id from params
   const product = db.getProduct(req.params.id);
   const categories = db.getAllCategoriesForProduct(req.params.id);
+  const images = db.getAllImagesForProduct(req.params.id);
   res.render('products/product', {
     title: 'A singular product',
     product,
     categories,
+    images,
   });
 }
 
