@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 8000;
 
 const app = express();
 app.set('view engine', 'ejs');
-app.use('/static', express.static('public'));
+app.use('/public', express.static('public'));
 app.use('/uploads', express.static('uploads'));
 app.use(express.urlencoded({ extended: true }));
 
