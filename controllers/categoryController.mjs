@@ -10,7 +10,6 @@ function getCategory(req, res) {
   // Get category from db with id from params
   const category = db.getCategory(req.params.id);
   const products = db.getAllProductsInCategory(req.params.id);
-  console.log('products in category: ', products);
   res.render('categories/category', {
     title: 'A singular category',
     category,
