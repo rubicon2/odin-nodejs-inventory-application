@@ -240,9 +240,8 @@ function getAllImagesForProduct(id) {
   );
 }
 
-function addProductImage(product_id, image, alt_text) {
+function addProductImage(product_id, img_url, alt_text) {
   const id = getNextId(product_images);
-  const { path: img_url } = image;
   product_images[id] = {
     id,
     product_id,
@@ -261,7 +260,7 @@ function addProductImages(id, images) {
   return added_rows;
 }
 
-function deleteProductImage(id) {
+async function deleteProductImage(id) {
   delete product_images[id];
 }
 

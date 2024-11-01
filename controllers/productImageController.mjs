@@ -1,3 +1,4 @@
+import fs from 'node:fs/promises';
 import * as db from '../db/queries.mjs';
 
 async function getProductImages(req, res) {
@@ -26,12 +27,17 @@ async function getNewProductImageForm(req, res) {
 
 async function postNewProductImageForm(req, res) {
   const { product_id, alt_text } = req.body;
-  const image = req.file;
-  await db.addProductImage(product_id, image, alt_text);
+  const { path: img_url } = req.file;
+  await db.addProductImage(product_id, img_url, alt_text);
   res.status(303).redirect('/product-image');
 }
 
 async function deleteProductImage(req, res) {
+  const id = req.params.id;
+  // Delete image file.
+  const { img_url } = db.getProductImage(id);
+  fs.unlink(img_url).catch((error) => console.error(error));
+  // Remove entry in database that points to that file.
   await db.deleteProductImage(req.params.id);
   res.status(303).redirect('/product-image');
 }
