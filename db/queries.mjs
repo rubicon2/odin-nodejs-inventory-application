@@ -114,6 +114,10 @@ function updateProduct(id, updates) {
 
 function deleteProduct(id) {
   delete products[id];
+  // Remove all entries that map this product to a category.
+  getAllProductToCategoryRowsForProduct(id).forEach(
+    (row) => delete products_to_categories[row.id],
+  );
 }
 
 function getAllManufacturers() {
