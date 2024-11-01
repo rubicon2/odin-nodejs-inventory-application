@@ -13,7 +13,9 @@
       <% }); %>
       </ul>
     <% }; %>
-    <a href="/category/<%= category.id %>/edit">Edit category</a>
+    <a href="/category/<%= category.id %>/edit">
+      <button type="button">Edit</button>
+    </a>
     <form action="/category/<%= category.id %>/delete" method="post">
       <button type="submit">Delete</button>
     </form>
