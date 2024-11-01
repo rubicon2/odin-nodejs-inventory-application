@@ -28,6 +28,8 @@
       </ul>
     <% }; %>
     <a href="/product/<%= product.id %>/edit">Edit product</a>
-    <a href="/product/<%= product.id %>/delete">Delete product</a>
+    <form action="/product/<%= product.id %>/delete" method="post">
+      <button type="submit">Delete</button>
+    </form>
   </body>
 </html>

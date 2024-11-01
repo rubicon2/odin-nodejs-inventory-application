@@ -20,7 +20,6 @@ const upload = multer({ storage });
 appRouter.get('/', productController.getProducts);
 appRouter.get('/new', productController.getNewProductForm);
 appRouter.get('/:id', productController.getProduct);
-appRouter.get('/:id/delete', productController.deleteProduct);
 appRouter.get('/:id/edit', productController.getEditProductForm);
 
 appRouter.post(
@@ -33,5 +32,6 @@ appRouter.post(
   upload.array('img', 20),
   productController.postEditProductForm,
 );
+appRouter.post('/:id/delete', productController.deleteProduct);
 
 export default appRouter;
