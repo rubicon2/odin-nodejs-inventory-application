@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs') %>
+  <body>
+    <%- include('../partials/nav.ejs') %>
+    <h1>New product image</h1>
+    <form action="/product-image/new" method="post" enctype="multipart/form-data">
+      <%- include('./productImageFormFields.ejs') %>
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>

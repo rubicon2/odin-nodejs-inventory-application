@@ -22,8 +22,6 @@
     </ul>
   <% }); %>
 <% }; %>
-<label for="img">Add images: </label>
-<input type="file" name="img" id="img" multiple>
 <select name="category_ids" id="category_ids" multiple>
   <% categories.forEach((category) => { %>
     <option value="<%= category.id %>" <%- locals.product != null && selectedCategoryIds.includes(category.id) ? 'selected' : '' %>><%= category.name %></option>

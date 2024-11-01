@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs') %>
+  <body>
+    <%- include('../partials/nav.ejs') %>
+    <h1>Product Images!</h1>
+    <ul>
+      <% productImages.forEach((productImage) => { %>
+        <li>
+          <%- include('./productImageListItem.ejs', {productImage}) %>
+        </li>
+      <% }) %>
+    </ul>
+    <a href="/product-image/new">Add a new product image</a>
+  </body>
+</html>

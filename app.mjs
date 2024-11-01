@@ -2,6 +2,7 @@ import express from 'express';
 import 'dotenv/config';
 
 import productRouter from './routes/productRouter.mjs';
+import productImageRouter from './routes/productImageRouter.mjs';
 import manufacturerRouter from './routes/manufacturerRouter.mjs';
 import categoryRouter from './routes/categoryRouter.mjs';
 
@@ -16,6 +17,7 @@ app.use('/uploads', express.static('uploads'));
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/product', productRouter);
+app.use('/product-image', productImageRouter);
 app.use('/manufacturer', manufacturerRouter);
 app.use('/category', categoryRouter);
 

@@ -230,19 +230,24 @@ function getAllProductImages() {
   return Array.from(Object.values(product_images));
 }
 
+function getProductImage(id) {
+  return product_images[id];
+}
+
 function getAllImagesForProduct(id) {
   return Array.from(Object.values(product_images)).filter(
     (row) => row.product_id == id,
   );
 }
 
-function addProductImage(product_id, image) {
+function addProductImage(product_id, image, alt_text) {
   const id = getNextId(product_images);
   const { path: img_url } = image;
   product_images[id] = {
     id,
     product_id,
     img_url,
+    alt_text,
   };
   return product_images[id];
 }
@@ -254,13 +259,6 @@ function addProductImages(id, images) {
     added_rows.push(addProductImage(id, image));
   }
   return added_rows;
-}
-
-function updateProductImage(id, updates) {
-  product_images[id] = {
-    ...product_images[id],
-    ...updates,
-  };
 }
 
 function deleteProductImage(id) {
@@ -294,9 +292,9 @@ export {
   updateCategoriesForProduct,
   getAllProductsInCategory,
   getAllProductImages,
+  getProductImage,
   getAllImagesForProduct,
   addProductImage,
   addProductImages,
-  updateProductImage,
   deleteProductImage,
 };

@@ -1,0 +1,10 @@
+<label for="product_id">Product: </label>
+<select name="product_id" id="product_id">
+  <% products.forEach((product) => { %>
+    <option value="<%= product.id %>" <%= locals.selectedProduct != null && product.id == selectedProduct.id ? 'selected' : '' %>><%= product.name %></option>
+  <% }); %>
+</select>
+<label for="img">Add image: </label>
+<input type="file" name="img" id="img" value="<%= locals.productImage ? productImage.img_url : '' %>">
+<label for="alt_text">Alt text: </label>
+<input type="text" name="alt_text" id="alt_text" value="<%= locals.productImage ? productImage.alt_text : '' %>">
