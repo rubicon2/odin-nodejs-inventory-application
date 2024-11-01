@@ -42,7 +42,7 @@ function postNewProductForm(req, res) {
     category_ids,
   } = req.body;
   // Add to database.
-  const product = db.addProduct({
+  const { id } = db.addProduct({
     name,
     manufacturer_id,
     price,
@@ -50,10 +50,10 @@ function postNewProductForm(req, res) {
     available,
     img,
   });
-  db.addCategoriesForProduct(product.id, category_ids);
   const img_files = req.files;
-  db.addProductImages(product.id, img_files);
-  res.status(303).redirect('/product');
+  db.addProductImages(id, img_files);
+  db.addCategoriesForProduct(id, category_ids);
+  res.status(303).redirect(`/product/${id}`);
 }
 
 function getEditProductForm(req, res) {
@@ -98,7 +98,7 @@ function postEditProductForm(req, res) {
   db.updateCategoriesForProduct(id, category_ids);
   const img_files = req.files;
   db.addProductImages(id, img_files);
-  res.status(303).redirect('/product');
+  res.status(303).redirect(`/product/${id}`);
 }
 
 function deleteProduct(req, res) {

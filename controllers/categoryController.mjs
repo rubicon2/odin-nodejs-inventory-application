@@ -26,10 +26,10 @@ function getNewCategoryForm(req, res) {
 function postNewCategoryForm(req, res) {
   const { name } = req.body;
   // Add to database.
-  db.addCategory({
+  const { id } = db.addCategory({
     name,
   });
-  res.status(303).redirect('/category');
+  res.status(303).redirect(`/category/${id}`);
 }
 
 function getEditCategoryForm(req, res) {
@@ -47,7 +47,7 @@ function postEditCategoryForm(req, res) {
     id,
     name,
   });
-  res.status(303).redirect('/category');
+  res.status(303).redirect(`/category/${id}`);
 }
 
 function deleteCategory(req, res) {
