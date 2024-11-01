@@ -105,20 +105,6 @@ function deleteProduct(req, res) {
   res.status(303).redirect('/product');
 }
 
-function getProductReviews(req, res) {}
-
-function getProductReview(req, res) {}
-
-function getNewProductReviewForm(req, res) {}
-
-function postNewProductReviewForm(req, res) {}
-
-function getEditProductReviewForm(req, res) {}
-
-function postEditProductReviewForm(req, res) {}
-
-function deleteProductReview(req, res) {}
-
 export {
   getProducts,
   getProduct,
@@ -127,11 +113,4 @@ export {
   getEditProductForm,
   postEditProductForm,
   deleteProduct,
-  getProductReviews,
-  getProductReview,
-  getNewProductReviewForm,
-  postNewProductReviewForm,
-  getEditProductReviewForm,
-  postEditProductReviewForm,
-  deleteProductReview,
 };
