@@ -34,4 +34,15 @@ appRouter.post(
 );
 appRouter.post('/:id/delete', productController.deleteProduct);
 
+appRouter.post(
+  '/:id/image/new',
+  upload.single('img'),
+  productController.postNewProductImageForm,
+);
+
+appRouter.post(
+  '/:id/image/:image_id/delete',
+  productController.deleteProductImage,
+);
+
 export default appRouter;

@@ -1,3 +1,4 @@
+import fs from 'node:fs/promises';
 import * as db from '../db/queries.mjs';
 
 function getProducts(req, res) {
@@ -105,6 +106,24 @@ function deleteProduct(req, res) {
   res.status(303).redirect('/product');
 }
 
+function postNewProductImageForm(req, res) {
+  const { id } = req.params;
+  const { alt_text } = req.body;
+  const { path: img_url } = req.file;
+  db.addProductImage(id, img_url, alt_text);
+  res.status(303).redirect(`/product/${id}`);
+}
+
+function deleteProductImage(req, res) {
+  const { id, image_id } = req.params;
+  // Delete the file.
+  const { img_url } = db.getProductImage(image_id);
+  fs.unlink(img_url).catch((error) => console.error(error));
+  // Remove the database entry that links to that file.
+  db.deleteProductImage(image_id);
+  res.status(303).redirect(`/product/${id}`);
+}
+
 export {
   getProducts,
   getProduct,
@@ -113,4 +132,6 @@ export {
   getEditProductForm,
   postEditProductForm,
   deleteProduct,
+  postNewProductImageForm,
+  deleteProductImage,
 };

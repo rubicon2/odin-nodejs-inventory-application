@@ -12,11 +12,22 @@
       <ul>
         <% images.forEach((image) => { %>
           <li>
-            <img src="/<%= image.img_url %>" alt="">
+            <h3><%= image.alt_text %></h3>
+            <img src="/<%= image.img_url %>" alt="<%= image.alt_text %>">
+            <form action="/product/<%= product.id %>/image/<%= image.id %>/delete" method="post">
+              <button type="submit">Delete</button>
+            </form>
           </li>
         <% }); %>
       </ul>
     <% } %>
+    <form action="/product/<%= product.id %>/image/new" method="post" enctype="multipart/form-data">
+      <label for="img">Image: </label>
+      <input type="file" name="img" id="img">
+      <label for="alt_text">Alt text: </label>
+      <input type="text" name="alt_text" id="alt_text">
+      <button type="submit">Add image</button>
+    </form>
     <% if (locals.categories != null && categories.length > 0) { %>
       <h2>Categories</h2>
       <ul>
