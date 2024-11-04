@@ -47,12 +47,19 @@ function getEditManufacturerForm(req, res) {
 
 function postEditManufacturerForm(req, res) {
   const id = req.params.id;
-  // Delete previous logo file.
-  const { img_url: previous_img_url } = db.getManufacturer(id);
-  fs.unlink(previous_img_url).catch((error) => console.error(error));
+  let img_url = '';
+  let { img_url: previous_img_url } = db.getManufacturer(id);
+  if (req.file) {
+    img_url = req.file.path;
+    // Delete previous logo file if there is a new file to upload.
+    fs.unlink(previous_img_url).catch((error) => console.error(error));
+  } else {
+    // If no new file in req, just re-use old one.
+    img_url = previous_img_url;
+  }
+
   // Update with the new details.
   const { name, description } = req.body;
-  const img_url = req.file.path;
   db.updateManufacturer(id, { id, name, description, img_url });
   res.status(303).redirect(`/manufacturer/${id}`);
 }
