@@ -22,14 +22,10 @@ appRouter.get('/new', productController.getNewProductForm);
 appRouter.get('/:id', productController.getProduct);
 appRouter.get('/:id/edit', productController.getEditProductForm);
 
-appRouter.post(
-  '/new',
-  upload.array('img', 20),
-  productController.postNewProductForm,
-);
+appRouter.post('/new', upload.none(), productController.postNewProductForm);
 appRouter.post(
   '/:id/edit',
-  upload.array('img', 20),
+  upload.none(),
   productController.postEditProductForm,
 );
 appRouter.post('/:id/delete', productController.deleteProduct);
