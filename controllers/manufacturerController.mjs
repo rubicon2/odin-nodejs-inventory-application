@@ -2,7 +2,6 @@ import * as db from '../db/queries.mjs';
 import fs from 'node:fs/promises';
 
 async function getManufacturers(req, res) {
-  // Get manufacturers from db
   const manufacturers = await db.getAllManufacturers();
   res.render('manufacturers/manufacturerList', {
     title: 'Manufacturers',
@@ -11,7 +10,6 @@ async function getManufacturers(req, res) {
 }
 
 async function getManufacturer(req, res) {
-  // Get product from db with id from params
   const manufacturer = await db.getManufacturer(req.params.id);
   res.render('manufacturers/manufacturer', {
     title: 'A singular manufacturer',
@@ -26,7 +24,6 @@ function getNewManufacturerForm(req, res) {
 async function postNewManufacturerForm(req, res) {
   const { name, description } = req.body;
   const img_url = req.file.path;
-  // Add to database.
   const { id } = await db.addManufacturer({
     name,
     description,
@@ -36,8 +33,10 @@ async function postNewManufacturerForm(req, res) {
 }
 
 async function getEditManufacturerForm(req, res) {
-  const manufacturer = await db.getManufacturer(req.params.id);
-  const manufacturers = await db.getAllManufacturers();
+  const [manufacturer, manufacturers] = await Promise.all([
+    db.getManufacturer(req.params.id),
+    db.getAllManufacturers(),
+  ]);
   res.render(`manufacturers/editManufacturer`, {
     title: 'Edit manufacturer',
     manufacturer,
@@ -47,6 +46,7 @@ async function getEditManufacturerForm(req, res) {
 
 async function postEditManufacturerForm(req, res) {
   const id = req.params.id;
+
   let img_url = '';
   let { img_url: previous_img_url } = await db.getManufacturer(id);
   if (req.file) {

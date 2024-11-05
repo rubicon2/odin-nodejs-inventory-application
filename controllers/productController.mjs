@@ -2,16 +2,17 @@ import fs from 'node:fs/promises';
 import * as db from '../db/queries.mjs';
 
 async function getProducts(req, res) {
-  // Get products from db
   const products = await db.getAllProducts();
   res.render('products/productList', { title: 'Products', products });
 }
 
 async function getProduct(req, res) {
-  // Get product from db with id from params
-  const product = await db.getProduct(req.params.id);
-  const categories = await db.getAllCategoriesForProduct(req.params.id);
-  const images = await db.getAllImagesForProduct(req.params.id);
+  const { id } = req.params;
+  const [product, categories, images] = await Promise.all([
+    db.getProduct(id),
+    db.getAllCategoriesForProduct(id),
+    db.getAllImagesForProduct(id),
+  ]);
   res.render('products/product', {
     title: 'A singular product',
     product,
@@ -22,8 +23,10 @@ async function getProduct(req, res) {
 
 async function getNewProductForm(req, res) {
   // Get list of manufacturers from database to populate dropdown list in form.
-  const manufacturers = await db.getAllManufacturers();
-  const categories = await db.getAllCategories();
+  const [manufacturers, categories] = await Promise.all([
+    db.getAllManufacturers(),
+    db.getAllCategories(),
+  ]);
   res.render('products/newProduct', {
     title: 'New product',
     manufacturers,
@@ -34,7 +37,6 @@ async function getNewProductForm(req, res) {
 async function postNewProductForm(req, res) {
   const { name, manufacturer_id, price, description, available, category_ids } =
     req.body;
-  // Add to database.
   const { id } = await db.addProduct({
     name,
     manufacturer_id,
@@ -47,16 +49,18 @@ async function postNewProductForm(req, res) {
 }
 
 async function getEditProductForm(req, res) {
-  // Once things are working, find a way to make this not terrible??
-  // Or is it not terrible already? Hmmmmmmmm...
-  const product = await db.getProduct(req.params.id);
-  // Get list of manufacturers from database to populate dropdown list in form.
-  const manufacturers = await db.getAllManufacturers();
-  const categories = await db.getAllCategories();
-  const selectedCategoryIds = await db
-    .getAllCategoriesForProduct(req.params.id)
-    .map((category) => category.id);
-  const images = await db.getAllImagesForProduct(req.params.id);
+  const { id } = req.params;
+  const [product, productCategories, images, manufacturers, categories] =
+    await Promise.all([
+      db.getProduct(id),
+      db.getAllCategoriesForProduct(id),
+      db.getAllImagesForProduct(id),
+      db.getAllManufacturers(),
+      db.getAllCategories(),
+    ]);
+  const selectedCategoryIds = productCategories.map(
+    (category) => category.category_id,
+  );
   res.render(`products/editProduct`, {
     title: 'Edit product',
     product,
@@ -78,16 +82,18 @@ async function postEditProductForm(req, res) {
     img,
     category_ids,
   } = req.body;
-  await db.updateProduct(id, {
-    id,
-    name,
-    manufacturer_id: parseInt(manufacturer_id),
-    price: parseFloat(price),
-    description,
-    available: available === 'on' ? true : false,
-    img,
-  });
-  await db.updateCategoriesForProduct(id, category_ids);
+  await Promise.all([
+    db.updateProduct(id, {
+      id,
+      name,
+      manufacturer_id: parseInt(manufacturer_id),
+      price: parseFloat(price),
+      description,
+      available: available === 'on' ? true : false,
+      img,
+    }),
+    db.updateCategoriesForProduct(id, category_ids),
+  ]);
   res.status(303).redirect(`/product/${id}`);
 }
 

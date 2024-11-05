@@ -1,15 +1,16 @@
 import * as db from '../db/queries.mjs';
 
 async function getCategories(req, res) {
-  // Get categories from db
   const categories = await db.getAllCategories();
   res.render('categories/categoryList', { title: 'Categories', categories });
 }
 
 async function getCategory(req, res) {
-  // Get category from db with id from params
-  const category = await db.getCategory(req.params.id);
-  const products = await db.getAllProductsInCategory(req.params.id);
+  const { id } = req.params;
+  const [category, products] = await Promise.all([
+    db.getCategory(id),
+    db.getAllProductsInCategory(id),
+  ]);
   res.render('categories/category', {
     title: 'A singular category',
     category,
@@ -25,11 +26,9 @@ async function getNewCategoryForm(req, res) {
 
 async function postNewCategoryForm(req, res) {
   const { name } = req.body;
-  // Add to database.
-  const row = await db.addCategory({
+  const { id } = await db.addCategory({
     name,
   });
-  const { id } = row;
   res.status(303).redirect(`/category/${id}`);
 }
 
