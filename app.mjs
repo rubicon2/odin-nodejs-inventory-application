@@ -19,8 +19,8 @@ app.use('/product', productRouter);
 app.use('/manufacturer', manufacturerRouter);
 app.use('/category', categoryRouter);
 
-app.get('/', (req, res) => {
-  const products = db.getAllProducts();
+app.get('/', async (req, res) => {
+  const products = await db.getAllProducts();
   res.render('index', {
     title: 'Hello, world!',
     products,

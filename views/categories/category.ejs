@@ -7,7 +7,7 @@
     <% if (locals.products != null && products.length > 0) { %>
       <ul>
       <% products.forEach((product) => { %>
-        <a href="/product/<%= product.id %>">
+        <a href="/product/<%= product.product_id %>">
           <li><%= product.name %></li>
         </a>
       <% }); %>

@@ -1,18 +1,18 @@
 import * as db from '../db/queries.mjs';
 import fs from 'node:fs/promises';
 
-function getManufacturers(req, res) {
+async function getManufacturers(req, res) {
   // Get manufacturers from db
-  const manufacturers = db.getAllManufacturers();
+  const manufacturers = await db.getAllManufacturers();
   res.render('manufacturers/manufacturerList', {
     title: 'Manufacturers',
     manufacturers,
   });
 }
 
-function getManufacturer(req, res) {
+async function getManufacturer(req, res) {
   // Get product from db with id from params
-  const manufacturer = db.getManufacturer(req.params.id);
+  const manufacturer = await db.getManufacturer(req.params.id);
   res.render('manufacturers/manufacturer', {
     title: 'A singular manufacturer',
     manufacturer,
@@ -23,11 +23,11 @@ function getNewManufacturerForm(req, res) {
   res.render('manufacturers/newManufacturer', { title: 'New manufacturer' });
 }
 
-function postNewManufacturerForm(req, res) {
+async function postNewManufacturerForm(req, res) {
   const { name, description } = req.body;
   const img_url = req.file.path;
   // Add to database.
-  const { id } = db.addManufacturer({
+  const { id } = await db.addManufacturer({
     name,
     description,
     img_url,
@@ -35,9 +35,9 @@ function postNewManufacturerForm(req, res) {
   res.status(303).redirect(`/manufacturer/${id}`);
 }
 
-function getEditManufacturerForm(req, res) {
-  const manufacturer = db.getManufacturer(req.params.id);
-  const manufacturers = db.getAllManufacturers();
+async function getEditManufacturerForm(req, res) {
+  const manufacturer = await db.getManufacturer(req.params.id);
+  const manufacturers = await db.getAllManufacturers();
   res.render(`manufacturers/editManufacturer`, {
     title: 'Edit manufacturer',
     manufacturer,
@@ -45,10 +45,10 @@ function getEditManufacturerForm(req, res) {
   });
 }
 
-function postEditManufacturerForm(req, res) {
+async function postEditManufacturerForm(req, res) {
   const id = req.params.id;
   let img_url = '';
-  let { img_url: previous_img_url } = db.getManufacturer(id);
+  let { img_url: previous_img_url } = await db.getManufacturer(id);
   if (req.file) {
     img_url = req.file.path;
     // Delete previous logo file if there is a new file to upload.
@@ -60,7 +60,7 @@ function postEditManufacturerForm(req, res) {
 
   // Update with the new details.
   const { name, description } = req.body;
-  db.updateManufacturer(id, { id, name, description, img_url });
+  await db.updateManufacturer(id, { id, name, description, img_url });
   res.status(303).redirect(`/manufacturer/${id}`);
 }
 

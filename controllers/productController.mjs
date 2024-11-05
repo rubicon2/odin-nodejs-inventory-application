@@ -1,17 +1,17 @@
 import fs from 'node:fs/promises';
 import * as db from '../db/queries.mjs';
 
-function getProducts(req, res) {
+async function getProducts(req, res) {
   // Get products from db
-  const products = db.getAllProducts();
+  const products = await db.getAllProducts();
   res.render('products/productList', { title: 'Products', products });
 }
 
-function getProduct(req, res) {
+async function getProduct(req, res) {
   // Get product from db with id from params
-  const product = db.getProduct(req.params.id);
-  const categories = db.getAllCategoriesForProduct(req.params.id);
-  const images = db.getAllImagesForProduct(req.params.id);
+  const product = await db.getProduct(req.params.id);
+  const categories = await db.getAllCategoriesForProduct(req.params.id);
+  const images = await db.getAllImagesForProduct(req.params.id);
   res.render('products/product', {
     title: 'A singular product',
     product,
@@ -20,10 +20,10 @@ function getProduct(req, res) {
   });
 }
 
-function getNewProductForm(req, res) {
+async function getNewProductForm(req, res) {
   // Get list of manufacturers from database to populate dropdown list in form.
-  const manufacturers = db.getAllManufacturers();
-  const categories = db.getAllCategories();
+  const manufacturers = await db.getAllManufacturers();
+  const categories = await db.getAllCategories();
   res.render('products/newProduct', {
     title: 'New product',
     manufacturers,
@@ -31,38 +31,32 @@ function getNewProductForm(req, res) {
   });
 }
 
-function postNewProductForm(req, res) {
-  const {
-    name,
-    manufacturer_id,
-    price,
-    description,
-    available,
-    img,
-    category_ids,
-  } = req.body;
+async function postNewProductForm(req, res) {
+  const { name, manufacturer_id, price, description, available, category_ids } =
+    req.body;
   // Add to database.
-  const { id } = db.addProduct({
+  const { id } = await db.addProduct({
     name,
     manufacturer_id,
     price,
     description,
     available,
-    img,
   });
-  db.addCategoriesForProduct(id, category_ids);
+  await db.addCategoriesForProduct(id, category_ids);
   res.status(303).redirect(`/product/${id}`);
 }
 
-function getEditProductForm(req, res) {
-  const product = db.getProduct(req.params.id);
+async function getEditProductForm(req, res) {
+  // Once things are working, find a way to make this not terrible??
+  // Or is it not terrible already? Hmmmmmmmm...
+  const product = await db.getProduct(req.params.id);
   // Get list of manufacturers from database to populate dropdown list in form.
-  const manufacturers = db.getAllManufacturers();
-  const categories = db.getAllCategories();
-  const selectedCategoryIds = db
+  const manufacturers = await db.getAllManufacturers();
+  const categories = await db.getAllCategories();
+  const selectedCategoryIds = await db
     .getAllCategoriesForProduct(req.params.id)
     .map((category) => category.id);
-  const images = db.getAllImagesForProduct(req.params.id);
+  const images = await db.getAllImagesForProduct(req.params.id);
   res.render(`products/editProduct`, {
     title: 'Edit product',
     product,
@@ -73,7 +67,7 @@ function getEditProductForm(req, res) {
   });
 }
 
-function postEditProductForm(req, res) {
+async function postEditProductForm(req, res) {
   const id = req.params.id;
   const {
     name,
@@ -84,7 +78,7 @@ function postEditProductForm(req, res) {
     img,
     category_ids,
   } = req.body;
-  db.updateProduct(id, {
+  await db.updateProduct(id, {
     id,
     name,
     manufacturer_id: parseInt(manufacturer_id),
@@ -93,30 +87,30 @@ function postEditProductForm(req, res) {
     available: available === 'on' ? true : false,
     img,
   });
-  db.updateCategoriesForProduct(id, category_ids);
+  await db.updateCategoriesForProduct(id, category_ids);
   res.status(303).redirect(`/product/${id}`);
 }
 
-function deleteProduct(req, res) {
-  db.deleteProduct(req.params.id);
+async function deleteProduct(req, res) {
+  await db.deleteProduct(req.params.id);
   res.status(303).redirect('/product');
 }
 
-function postNewProductImageForm(req, res) {
+async function postNewProductImageForm(req, res) {
   const { id } = req.params;
   const { alt_text } = req.body;
   const { path: img_url } = req.file;
-  db.addProductImage(id, img_url, alt_text);
+  await db.addProductImage(id, img_url, alt_text);
   res.status(303).redirect(`/product/${id}`);
 }
 
-function deleteProductImage(req, res) {
+async function deleteProductImage(req, res) {
   const { id, image_id } = req.params;
   // Delete the file.
-  const { img_url } = db.getProductImage(image_id);
+  const { img_url } = await db.getProductImage(image_id);
   fs.unlink(img_url).catch((error) => console.error(error));
   // Remove the database entry that links to that file.
-  db.deleteProductImage(image_id);
+  await db.deleteProductImage(image_id);
   res.status(303).redirect(`/product/${id}`);
 }
 

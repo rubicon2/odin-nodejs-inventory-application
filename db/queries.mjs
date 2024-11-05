@@ -1,272 +1,200 @@
-// This represents the resulting query after mashing up all the info from
-// the product and manufacturer tables, for example.
-let products = {
-  5: {
-    id: 5,
-    name: 'Tele',
-    available: true,
-    price: 99.99,
-    description: 'Mega guitar',
-    img: '/default.jpg',
-    manufacturer_id: 0,
-    manufacturer_name: 'Fender',
-  },
-  1: {
-    id: 1,
-    name: 'SG Bass',
-    available: true,
-    price: 99.99,
-    description: 'Mega guitar',
-    img: '/default.jpg',
-    manufacturer_id: 1,
-    manufacturer_name: 'Gibson',
-  },
-};
+import pool from './pool.mjs';
 
-let manufacturers = {
-  0: {
-    id: 0,
-    name: 'Fender',
-    img_url: '',
-  },
-  1: {
-    id: 1,
-    name: 'Gibson',
-    img_url: '',
-  },
-};
-
-let categories = {
-  0: {
-    id: 0,
-    name: 'Electric guitars',
-  },
-  1: {
-    id: 1,
-    name: 'Bass guitars',
-  },
-  2: {
-    id: 2,
-    name: 'Acoustic guitars',
-  },
-  3: {
-    id: 3,
-    name: 'Drum kits',
-  },
-  4: {
-    id: 4,
-    name: 'Musical instruments',
-  },
-  5: {
-    id: 5,
-    name: 'Accessories',
-  },
-};
-
-let products_to_categories = {
-  0: {
-    id: 0,
-    product_id: 5,
-    category_id: 0,
-  },
-  1: {
-    id: 1,
-    product_id: 5,
-    category_id: 4,
-  },
-  2: {
-    id: 2,
-    product_id: 1,
-    category_id: 4,
-  },
-  3: {
-    id: 3,
-    product_id: 1,
-    category_id: 1,
-  },
-};
-
-let product_images = {};
-
-function getAllProducts() {
-  return Array.from(Object.values(products));
+async function getAllProducts() {
+  const { rows } = await pool.query('SELECT * FROM products');
+  return rows;
 }
 
-function getProduct(id) {
-  return products[id];
-}
-
-function addProduct(product) {
-  const id = getNextId(products);
-  products[id] = {
+async function getProduct(id) {
+  const { rows } = await pool.query('SELECT * FROM products WHERE id = $1', [
     id,
-    ...product,
-  };
-  return products[id];
+  ]);
+  return rows[0];
 }
 
-function updateProduct(id, updates) {
-  products[id] = {
-    ...products[id],
-    ...updates,
-  };
+async function addProduct(product) {
+  const { name, manufacturer_id, price, description, available } = product;
+  const { rows } = await pool.query(
+    'INSERT INTO products (manufacturer_id, name, available, price, description) VALUES ($1, $2, $3, $4, $5) RETURNING * ',
+    [manufacturer_id, name, available, price, description],
+  );
+  return rows[0];
 }
 
-function deleteProduct(id) {
-  delete products[id];
-  // Remove all entries that map this product to a category.
-  getAllProductToCategoryRowsForProduct(id).forEach(
-    (row) => delete products_to_categories[row.id],
+async function updateProduct(id, updates) {
+  const { name, manufacturer_id, price, description, available } = updates;
+  await pool.query(
+    `UPDATE products
+    SET
+      name = $1,
+      manufacturer_id = $2,
+      price = $3,
+      description = $4,
+      available =  $5
+    WHERE id = $6
+    `,
+    [name, manufacturer_id, price, description, available, id],
   );
 }
 
-function getAllManufacturers() {
-  return Array.from(Object.values(manufacturers));
+async function deleteProduct(id) {
+  // This should automatically deal with any entries in other tables where this row's id is used as a foreign key
+  // due to FOREIGN KEY ON DELETE CASCADE in the schema.
+  await pool.query('DELETE FROM products WHERE id = $1', [id]);
 }
 
-function getManufacturer(id) {
-  return manufacturers[id];
+async function getAllManufacturers() {
+  const { rows } = await pool.query(
+    'SELECT * FROM manufacturers ORDER BY name',
+  );
+  console.log('ROWS:', rows);
+  return rows;
 }
 
-function addManufacturer(manufacturer) {
-  const id = getNextId(manufacturers);
-  manufacturers[id] = {
-    id,
-    ...manufacturer,
-  };
-  return manufacturers[id];
+async function getManufacturer(id) {
+  const { rows } = await pool.query(
+    'SELECT * FROM manufacturers WHERE id = $1',
+    [id],
+  );
+
+  return rows[0];
 }
 
-function updateManufacturer(id, updates) {
-  manufacturers[id] = {
-    ...manufacturers[id],
-    ...updates,
-  };
+async function addManufacturer(manufacturer) {
+  const { name, description, img_url } = manufacturer;
+  const { rows } = await pool.query(
+    'INSERT INTO manufacturers (name, description, img_url) VALUES ($1, $2, $3) RETURNING *',
+    [name, description, img_url],
+  );
+  return rows[0];
 }
 
-function getAllCategories() {
-  return Array.from(Object.values(categories));
-}
-
-function getCategory(id) {
-  return categories[id];
-}
-
-function addCategory(category) {
-  const id = getNextId(categories);
-  categories[id] = {
-    id,
-    ...category,
-  };
-  return categories[id];
-}
-
-function updateCategory(id, updates) {
-  categories[id] = {
-    ...categories[id],
-    ...updates,
-  };
-}
-
-function deleteCategory(id) {
-  delete categories[id];
-  // Remove all entries that map this category to a product.
-  const productCategories = Array.from(
-    Object.values(products_to_categories),
-  ).filter((row) => id == row.category_id);
-  for (const row of productCategories) {
-    delete products_to_categories[row.id];
-  }
-}
-
-function getAllProductCategories() {
-  return Array.from(Object.values(products_to_categories));
-}
-
-function getAllProductToCategoryRowsForProduct(id) {
-  return getAllProductCategories().filter((row) => row.product_id == id);
-}
-
-function getAllCategoriesForProduct(id) {
-  return getAllProductToCategoryRowsForProduct(id).map(
-    (row) => categories[row.category_id],
+async function updateManufacturer(id, updates) {
+  const { name, description, img_url } = updates;
+  await pool.query(
+    `UPDATE manufacturers SET name = $1, description = $2, img_url = $3 WHERE id = $4`,
+    [name, description, img_url, id],
   );
 }
 
-function addCategoriesForProduct(product_id, category_ids) {
+async function getAllCategories() {
+  const { rows } = await pool.query('SELECT * FROM categories ORDER BY name');
+  return rows;
+}
+
+async function getCategory(id) {
+  const { rows } = await pool.query('SELECT * FROM categories WHERE id = $1', [
+    id,
+  ]);
+  return rows[0];
+}
+
+async function addCategory(category) {
+  const { name } = category;
+  const { rows } = await pool.query(
+    'INSERT INTO categories (name) VALUES ($1) RETURNING *',
+    [name],
+  );
+  return rows[0];
+}
+
+async function updateCategory(id, updates) {
+  const { name } = updates;
+  await pool.query('UPDATE categories SET name = $1 WHERE id = $2', [name, id]);
+}
+
+async function deleteCategory(id) {
+  // This should automatically delete any entries in the product_categories table,
+  // due to FOREIGN KEY ON DELETE CASCADE in the schema.
+  await pool.query('DELETE FROM categories WHERE id = $1', [id]);
+}
+
+async function getAllProductCategories() {
+  const { rows } = await pool.query(
+    'SELECT * FROM product_categories ORDER BY name',
+  );
+  return rows;
+}
+
+async function getAllProductToCategoryRowsForProduct(id) {
+  const { rows } = await pool.query(
+    'SELECT * FROM product_categories WHERE product_id = $1',
+    [id],
+  );
+  return rows;
+}
+
+async function getAllCategoriesForProduct(id) {
+  const { rows } = await pool.query(
+    'SELECT * FROM categories JOIN product_categories ON categories.id = product_categories.category_id WHERE product_categories.product_id = $1 ORDER BY categories.name',
+    [id],
+  );
+  return rows;
+}
+
+async function addCategoriesForProduct(product_id, category_ids) {
   // If no category ids are selected, the parameter will be null, and
   // we will want to return an empty array.
   if (!category_ids) return [];
   const added_rows = [];
   for (const category_id of category_ids) {
-    const id = getNextId(products_to_categories);
-    products_to_categories[id] = {
-      id,
-      product_id: parseInt(product_id),
-      category_id: parseInt(category_id),
-    };
-    added_rows.push(products_to_categories[id]);
+    const { rows } = await pool.query(
+      'INSERT INTO product_categories (product_id, category_id) VALUES ($1, $2)',
+      [product_id, category_id],
+    );
+    added_rows.push(...rows);
   }
   return added_rows;
 }
 
-function updateCategoriesForProduct(product_id, category_ids) {
-  // Delete all existing categories linked to this product.
-  const existingRows = getAllProductToCategoryRowsForProduct(product_id);
-  for (const existingRow of existingRows) {
-    delete products_to_categories[existingRow.id];
-  }
-  // Create new entries.
+async function updateCategoriesForProduct(product_id, category_ids) {
+  // Delete all existing entries that link a category to this product.
+  await pool.query('DELETE FROM product_categories WHERE product_id = $1', [
+    product_id,
+  ]);
+  // Add the new ones.
   addCategoriesForProduct(product_id, category_ids);
 }
 
-function getAllProductsInCategory(id) {
-  return getAllProductCategories()
-    .filter((row) => row.category_id == id)
-    .map((row) => products[row.product_id]);
-}
-
-function getAllProductImages() {
-  return Array.from(Object.values(product_images));
-}
-
-function getProductImage(id) {
-  return product_images[id];
-}
-
-function getAllImagesForProduct(id) {
-  return Array.from(Object.values(product_images)).filter(
-    (row) => row.product_id == id,
+async function getAllProductsInCategory(id) {
+  const { rows } = await pool.query(
+    'SELECT * FROM products JOIN product_categories ON product_categories.product_id = products.id WHERE product_categories.category_id = $1',
+    [id],
   );
+  return rows;
 }
 
-function addProductImage(product_id, img_url, alt_text) {
-  const id = getNextId(product_images);
-  product_images[id] = {
-    id,
-    product_id,
-    img_url,
-    alt_text,
-  };
-  return product_images[id];
+async function getAllProductImages() {
+  const { rows } = await pool.query('SELECT * FROM product_images');
+  return rows;
 }
 
-function addProductImages(id, images) {
-  if (!images) return [];
-  const added_rows = [];
-  for (const image of images) {
-    added_rows.push(addProductImage(id, image));
-  }
-  return added_rows;
+async function getProductImage(id) {
+  const { rows } = await pool.query(
+    'SELECT * FROM product_images WHERE id = $1',
+    [id],
+  );
+  return rows[0];
+}
+
+async function getAllImagesForProduct(id) {
+  const { rows } = await pool.query(
+    'SELECT * FROM product_images WHERE product_id = $1',
+    [id],
+  );
+  return rows;
+}
+
+async function addProductImage(product_id, img_url, alt_text) {
+  const { rows } = await pool.query(
+    'INSERT INTO product_images (product_id, img_url, alt_text) VALUES ($1, $2, $3)',
+    [product_id, img_url, alt_text],
+  );
+  return rows;
 }
 
 async function deleteProductImage(id) {
-  delete product_images[id];
-}
-
-function getNextId(obj) {
-  const arr = Array.from(Object.values(obj)).sort((a, b) => a.id - b.id);
-  return arr.length == 0 ? 0 : arr[arr.length - 1].id + 1;
+  await pool.query('DELETE FROM product_images WHERE id = $1', [id]);
 }
 
 export {
@@ -294,6 +222,5 @@ export {
   getProductImage,
   getAllImagesForProduct,
   addProductImage,
-  addProductImages,
   deleteProductImage,
 };
