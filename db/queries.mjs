@@ -1,7 +1,7 @@
 import pool from './pool.mjs';
 
 async function getAllProducts() {
-  const { rows } = await pool.query('SELECT * FROM products');
+  const { rows } = await pool.query('SELECT * FROM products ORDER BY name');
   return rows;
 }
 
