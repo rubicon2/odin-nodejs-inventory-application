@@ -5,7 +5,8 @@ const { Client } = require('pg');
 const SQL = `  
   CREATE TABLE IF NOT EXISTS manufacturers (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name VARCHAR ( 255 ) NOT NULL,
+    name VARCHAR ( 255 ) NOT NULL UNIQUE,
+    description TEXT,
     img_url VARCHAR ( 255 )
   );
 
@@ -16,12 +17,11 @@ const SQL = `
     available BOOL NOT NULL,
     price NUMERIC NOT NULL,
     description TEXT,
-    img_url VARCHAR ( 255 )
   );
 
   CREATE TABLE IF NOT EXISTS categories (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name VARCHAR ( 255 ) NOT NULL
+    name VARCHAR ( 255 ) NOT NULL UNIQUE
   );
 
   CREATE TABLE IF NOT EXISTS product_categories (
@@ -36,7 +36,8 @@ const SQL = `
   CREATE TABLE IF NOT EXISTS product_images (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     product_id INTEGER REFERENCES products ( id ) ON DELETE CASCADE,
-    img_url VARCHAR ( 255 ) NOT NULL
+    img_url VARCHAR ( 255 ) NOT NULL,
+    alt_text VARCHAR ( 255 ) NOT NULL
   );
 
   CREATE INDEX IF NOT EXISTS product_images_p_id_index ON product_images ( product_id );

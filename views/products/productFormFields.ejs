@@ -22,7 +22,7 @@
     </ul>
   <% }); %>
 <% }; %>
-<select name="category_ids" id="category_ids" multiple>
+<select name="category_ids[]" id="category_ids" multiple>
   <% categories.forEach((category) => { %>
     <option value="<%= category.id %>" <%- locals.product != null && selectedCategoryIds.includes(category.id) ? 'selected' : '' %>><%= category.name %></option>
   <% }); %>
