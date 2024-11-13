@@ -47,7 +47,6 @@ async function getAllManufacturers() {
   const { rows } = await pool.query(
     'SELECT * FROM manufacturers ORDER BY name',
   );
-  console.log('ROWS:', rows);
   return rows;
 }
 
