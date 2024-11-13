@@ -5,60 +5,69 @@
     <%- include('../partials/nav.ejs') %>
     <div class="container section-top-padding section-bottom-padding">
       <h1><%= product.name %></h1>
-      <p><%= product.price %></p>
-      <p><%= product.description %></p>
-      <p><%= product.available ? 'In Stock' : 'Out of Stock' %></p>
-      <h2 class="section-top-padding">Images</h2>
-      <ul class="list-no-style">
-        <% if (locals.images !=null && images.length> 0) { %>
-          <% images.forEach((image) => { %>
-            <li>
-              <h3><%= image.alt_text %></h3>
-              <img src="/<%= image.img_url %>" alt="<%= image.alt_text %>">
-              <form action="/product/<%= product.id %>/image/<%= image.id %>/delete" method="post">
-                <button type="submit">Delete</button>
-              </form>
-            </li>
-          <% }); %>
-        <% } else { %>
-          <li>
-            <h3>No product image available</h3>
-            <img src="/public/no_img.png" alt="No product image">
-          </li>
-        <% } %>
-      </ul>
-      <div class="section-top-padding">
-        <form action="/product/<%= product.id %>/image/new" method="post" enctype="multipart/form-data">
-          <div class="form-row">
-            <label for="img">Image: </label>
-            <input type="file" name="img" id="img" required>
+      <div class="grid">
+        <div>
+          <h2>Information</h2>
+          <p class="section-bottom-padding"><%= product.description %></p>
+          <p>£<%= product.price %></p>
+          <p><%= product.available ? 'In Stock' : 'Out of Stock' %></p>
+          <% if (locals.categories !=null && categories.length> 0) { %>
+            <h2 class="section-top-padding">Categories</h2>
+            <ul>
+              <% categories.forEach((category)=> { %>
+                <a href="/category/<%= category.category_id %>">
+                  <li>
+                    <%= category.name %>
+                  </li>
+                </a>
+                <% }); %>
+            </ul>
+            <% }; %>
+              <div class="section-top-padding">
+                <h2>Settings</h2>
+                <div class="settings-buttons">
+                  <a href="/product/<%= product.id %>/edit">
+                    <button type="button">Edit</button>
+                  </a>
+                  <form action="/product/<%= product.id %>/delete" method="post">
+                    <button type="submit">Delete</button>
+                  </form>
+                </div>
+              </div>
+        </div>
+        <div>
+          <h2>Images</h2>
+          <ul class="list-no-style image-list">
+            <% if (locals.images !=null && images.length> 0) { %>
+              <% images.forEach((image) => { %>
+                <li>
+                  <h3><%= image.alt_text %></h3>
+                  <img src="/<%= image.img_url %>" alt="<%= image.alt_text %>">
+                  <form action="/product/<%= product.id %>/image/<%= image.id %>/delete" method="post">
+                    <button type="submit">Delete</button>
+                  </form>
+                </li>
+              <% }); %>
+            <% } else { %>
+              <li>
+                <h3>No product image available</h3>
+                <img src="/public/no_img.png" alt="No product image">
+              </li>
+            <% } %>
+          </ul>
+          <div class="section-top-padding">
+            <form action="/product/<%= product.id %>/image/new" method="post" enctype="multipart/form-data">
+              <div class="form-row">
+                <label for="img">Image: </label>
+                <input type="file" name="img" id="img" required>
+              </div>
+              <div class="form-row">
+                <label for="alt_text">Alt text: </label>
+                <input type="text" name="alt_text" id="alt_text" required>
+              </div>
+              <button type="submit">Add image</button>
+            </form>
           </div>
-          <div class="form-row">
-            <label for="alt_text">Alt text: </label>
-            <input type="text" name="alt_text" id="alt_text" required>
-          </div>
-          <button type="submit">Add image</button>
-        </form>
-      </div>
-      <% if (locals.categories != null && categories.length > 0) { %>
-        <h2 class="section-top-padding">Categories</h2>
-        <ul>
-          <% categories.forEach((category) => { %>
-            <a href="/category/<%= category.category_id %>">
-              <li><%= category.name %></li>
-            </a>
-          <% }); %>
-        </ul>
-      <% }; %>
-      <div class="section-top-padding">
-        <h1>Settings</h1>
-        <div class="settings-buttons">
-          <a href="/product/<%= product.id %>/edit">
-            <button type="button">Edit</button>
-          </a>
-          <form action="/product/<%= product.id %>/delete" method="post">
-            <button type="submit">Delete</button>
-          </form>
         </div>
       </div>
     </div>
