@@ -1,0 +1,9 @@
+<a href="/product/<%= product.id %>">
+  <div class="form-row-h header">
+    <h2>
+      <%= product.name %>
+    </h2>
+    £<%= product.price %>
+  </div>
+  <img src="/<%= product.img_url || 'public/no_img.png' %>" alt="<%= product.alt_text %>">
+</a>

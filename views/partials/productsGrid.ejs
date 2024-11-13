@@ -1,0 +1,7 @@
+<ul class="list-no-style grid section-bottom-padding">
+  <% products.forEach((product)=> { %>
+    <li class="grid-product">
+      <%- include('./productsGridItem.ejs', { product }) %>
+    </li>
+    <% }); %>
+</ul>

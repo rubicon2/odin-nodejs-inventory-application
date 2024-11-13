@@ -3,8 +3,8 @@
 <%- include('../partials/head.ejs') %>
   <body>
     <%- include('../partials/nav.ejs') %>
-    <div>
-      <img src="/<%= manufacturer.img_url %>" alt="<%= manufacturer.name %>">
+    <div class="container section-top-padding section-bottom-padding">
+      <img src="/<%= manufacturer.img_url || '/public/no_img.png' %>" alt="<%= manufacturer.name %>">
       <p><%= manufacturer.description %></p>
       <h2>Products</h2>
       <% if (locals.products != null && products.length > 0) { %>

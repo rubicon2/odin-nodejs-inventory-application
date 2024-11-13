@@ -3,7 +3,9 @@
 <%- include('partials/head.ejs') %>
 <body>
   <%- include('partials/nav.ejs') %>
-  <h1>An error has occurred: <%= error.message %></h1>
-  <p><%= error.stack %></p>
+  <div class="container section-top-padding">
+    <h1>An error has occurred: <%= error.message %></h1>
+    <p><%= error.stack %></p>
+  </div>
 </body>
 </html>

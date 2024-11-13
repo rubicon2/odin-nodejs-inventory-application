@@ -1,0 +1,137 @@
+:root {
+  font-family: 'Open Sans', sans-serif;
+  --main-accent-color: #3344aa;
+  --main-text-color: #333333;
+  --secondary-text-color: #666666;
+  --light-text-color: #eeeeee;
+
+  color: var(--main-text-color);
+}
+
+// DEBUG
+* {
+  // outline: 1px dotted red;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Monserrat', sans-serif;
+}
+
+.list-no-style {
+  list-style: none;
+  padding: 0;
+}
+
+.container {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.nav-list-h {
+  display: flex;
+  justify-content: space-around;
+}
+
+.main-nav {
+  background-color: var(--main-accent-color);
+  padding: 1rem 0;
+
+  position: sticky;
+  top: 0px;
+  z-index: 1;
+
+  a {
+    text-decoration: none;
+    font-weight: 700;
+
+    color: var(--light-text-color);
+
+    &:hover {
+      filter: brightness(0.8);
+    }
+  }
+}
+
+form {
+  display: grid;
+  flex-direction: column;
+  max-width: 400px;
+
+  gap: 0.5rem;
+
+  label {
+    font-weight: 700;
+    color: var(--secondary-text-color);
+  }
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+  justify-content: center;
+}
+
+.form-row-h {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.section-top-padding {
+  padding-top: 1rem;
+}
+
+.section-bottom-padding {
+  padding-bottom: 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+  align-items: center;
+
+  .grid-product,
+  .grid-category {
+    border: 2px solid #eeeeeeff;
+    border-radius: 5px;
+    padding: 1rem;
+    box-shadow: 5px 5px 5px 5px #6666660a;
+    background-color: white;
+
+    transition: filter 0.2s;
+    
+    &:hover {
+      filter: brightness(0.9);
+    }
+
+    a {
+      text-decoration: none;
+      color: var(--secondary-text-color);
+    }
+
+    img {
+      height: 350px;
+      width: 100%;
+      object-fit: contain;
+    }
+  }
+}
+
+@media(max-width: 500px) {
+  .main-nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+}

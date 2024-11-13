@@ -3,46 +3,61 @@
 <%- include('../partials/head.ejs') %>
   <body>
     <%- include('../partials/nav.ejs') %>
-    <h1><%= product.name %></h1>
-    <p><%= product.price %></p>
-    <p><%= product.description %></p>
-    <p><%= product.available ? 'In Stock' : 'Out of Stock' %></p>
-    <% if (locals.images != null && images.length > 0) { %>
-      <h2>Images</h2>
-      <ul>
-        <% images.forEach((image) => { %>
+    <div class="container section-top-padding">
+      <h1><%= product.name %></h1>
+      <p><%= product.price %></p>
+      <p><%= product.description %></p>
+      <p><%= product.available ? 'In Stock' : 'Out of Stock' %></p>
+      <h2 class="section-top-padding">Images</h2>
+      <ul class="list-no-style">
+        <% if (locals.images !=null && images.length> 0) { %>
+          <% images.forEach((image) => { %>
+            <li>
+              <h3><%= image.alt_text %></h3>
+              <img src="/<%= image.img_url %>" alt="<%= image.alt_text %>">
+              <form action="/product/<%= product.id %>/image/<%= image.id %>/delete" method="post">
+                <button type="submit">Delete</button>
+              </form>
+            </li>
+          <% }); %>
+        <% } else { %>
           <li>
-            <h3><%= image.alt_text %></h3>
-            <img src="/<%= image.img_url %>" alt="<%= image.alt_text %>">
-            <form action="/product/<%= product.id %>/image/<%= image.id %>/delete" method="post">
-              <button type="submit">Delete</button>
-            </form>
+            <h3>No product image available</h3>
+            <img src="/public/no_img.png" alt="No product image">
           </li>
-        <% }); %>
+        <% } %>
       </ul>
-    <% } %>
-    <form action="/product/<%= product.id %>/image/new" method="post" enctype="multipart/form-data">
-      <label for="img">Image: </label>
-      <input type="file" name="img" id="img">
-      <label for="alt_text">Alt text: </label>
-      <input type="text" name="alt_text" id="alt_text">
-      <button type="submit">Add image</button>
-    </form>
-    <% if (locals.categories != null && categories.length > 0) { %>
-      <h2>Categories</h2>
-      <ul>
-        <% categories.forEach((category) => { %>
-          <a href="/category/<%= category.category_id %>">
-            <li><%= category.name %></li>
-          </a>
-        <% }); %>
-      </ul>
-    <% }; %>
-    <a href="/product/<%= product.id %>/edit">
-      <button type="button">Edit</button>
-    </a>
-    <form action="/product/<%= product.id %>/delete" method="post">
-      <button type="submit">Delete</button>
-    </form>
+      <div class="section-top-padding">
+        <form action="/product/<%= product.id %>/image/new" method="post" enctype="multipart/form-data">
+          <div class="form-row">
+            <label for="img">Image: </label>
+            <input type="file" name="img" id="img" required>
+          </div>
+          <div class="form-row">
+            <label for="alt_text">Alt text: </label>
+            <input type="text" name="alt_text" id="alt_text" required>
+          </div>
+          <button type="submit">Add image</button>
+        </form>
+      </div>
+      <% if (locals.categories != null && categories.length > 0) { %>
+        <h2 class="section-top-padding">Categories</h2>
+        <ul>
+          <% categories.forEach((category) => { %>
+            <a href="/category/<%= category.category_id %>">
+              <li><%= category.name %></li>
+            </a>
+          <% }); %>
+        </ul>
+      <% }; %>
+      <div class="section-top-padding">
+        <a href="/product/<%= product.id %>/edit">
+          <button type="button">Edit</button>
+        </a>
+        <form action="/product/<%= product.id %>/delete" method="post">
+          <button type="submit">Delete</button>
+        </form>
+      </div>
+    </div>
   </body>
 </html>

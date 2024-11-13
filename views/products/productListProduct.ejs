@@ -1,5 +1,6 @@
 <a href="/product/<%= product.id %>">
-  <h1><%= product.name %></h1>
+  <h2><%= product.name %></h2>
   <p><%= product.price %></p>
   <a href="/manufacturer/<%= product.manufacturer_id %>"><%= product.manufacturer_name %></a>
+  <img src="/<%= product.img_url %>" alt="<%= product.alt_text %>">
 </a>
