@@ -131,3 +131,6 @@ dist
 
 # user uploads
 uploads/
+
+# mac filesystem
+.DS_Store
