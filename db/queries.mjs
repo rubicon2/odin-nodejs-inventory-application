@@ -1,7 +1,23 @@
 import pool from './pool.mjs';
 
 async function getAllProducts() {
-  const { rows } = await pool.query('SELECT * FROM products ORDER BY name');
+  const { rows } = await pool.query(`
+    SELECT *
+    FROM (
+      SELECT DISTINCT ON (id)
+        p.id AS id,
+        p.manufacturer_id,
+        p.name AS name,
+        p.available,
+        p.price,
+        p.description,
+        pi.img_url,
+        pi.alt_text
+      FROM products AS p
+      LEFT JOIN product_images AS pi ON pi.product_id = p.id
+    ) AS result
+    ORDER BY result.name;
+  `);
   return rows;
 }
 
@@ -156,8 +172,34 @@ async function updateCategoriesForProduct(product_id, category_ids) {
 }
 
 async function getAllProductsInCategory(id) {
+  // Why does it need to be distinct on id AND category id?
+  // This is because if you only select it to have a DISTINCT id,
+  // if there is more than one row with different category_ids, all but one of
+  // those will effectively be discarded - and the one left may not
+  // necessarily relate to the category we are querying for!
+  // So ensure all rows with all categories are returned from the subquery,
+  // and filter out with the final WHERE on the resulting set.
   const { rows } = await pool.query(
-    'SELECT * FROM products JOIN product_categories ON product_categories.product_id = products.id WHERE product_categories.category_id = $1',
+    `
+    SELECT *
+    FROM (
+      SELECT DISTINCT ON (id, category_id)
+        p.id AS id,
+        p.manufacturer_id,
+        p.name AS name,
+        p.available,
+        p.price,
+        p.description,
+        pi.img_url,
+        pi.alt_text,
+        pc.category_id
+      FROM products AS p
+      LEFT JOIN product_images AS pi ON pi.product_id = p.id
+      LEFT JOIN product_categories AS pc ON p.id = pc.product_id
+    ) AS result
+    WHERE category_id = $1
+    ORDER BY result.name;
+  `,
     [id],
   );
   return rows;
