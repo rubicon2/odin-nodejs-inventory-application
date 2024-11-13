@@ -21,7 +21,8 @@ const SQL = `
 
   CREATE TABLE IF NOT EXISTS categories (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name VARCHAR ( 255 ) NOT NULL UNIQUE
+    name VARCHAR ( 255 ) NOT NULL UNIQUE,
+    img_url VARCHAR ( 255 ) NOT NULL
   );
 
   CREATE TABLE IF NOT EXISTS product_categories (
