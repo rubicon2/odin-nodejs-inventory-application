@@ -3,11 +3,18 @@
 <%- include('../partials/head.ejs') %>
   <body>
     <%- include('../partials/nav.ejs') %>
-    <h1><%= manufacturer.name %></h1>
-    <img src="/<%= manufacturer.img_url %>" alt="">
-    <p><%= manufacturer.description %></p>
-    <a href="/manufacturer/<%= manufacturer.id %>/edit">
-      <button type="button">Edit</button>
-    </a>
+    <div>
+      <img src="/<%= manufacturer.img_url %>" alt="<%= manufacturer.name %>">
+      <p><%= manufacturer.description %></p>
+      <h2>Products</h2>
+      <% if (locals.products != null && products.length > 0) { %>
+        <%- include('../partials/productsGrid.ejs', { products }) %>
+      <% } else { %>
+        <div>No products found.</div>
+      <% }; %>
+      <a href="/manufacturer/<%= manufacturer.id %>/edit">
+        <button type="button">Edit</button>
+      </a>
+    </div>
   </body>
 </html>

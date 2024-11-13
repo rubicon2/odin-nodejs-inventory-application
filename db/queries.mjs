@@ -66,6 +66,31 @@ async function getAllManufacturers() {
   return rows;
 }
 
+async function getAllProductsForManufacturer(id) {
+  const { rows } = await pool.query(
+    `
+    SELECT *
+    FROM (
+      SELECT DISTINCT ON (id)
+        p.id AS id,
+        p.manufacturer_id,
+        p.name AS name,
+        p.available,
+        p.price,
+        p.description,
+        pi.img_url,
+        pi.alt_text
+      FROM products AS p
+      LEFT JOIN product_images AS pi ON pi.product_id = p.id
+      WHERE manufacturer_id = $1
+    ) AS result
+    ORDER BY result.name;
+  `,
+    [id],
+  );
+  return rows;
+}
+
 async function getManufacturer(id) {
   const { rows } = await pool.query(
     'SELECT * FROM manufacturers WHERE id = $1',
@@ -251,6 +276,7 @@ export {
   getManufacturer,
   addManufacturer,
   updateManufacturer,
+  getAllProductsForManufacturer,
   getAllCategories,
   getCategory,
   addCategory,

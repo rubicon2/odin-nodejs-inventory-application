@@ -10,10 +10,15 @@ async function getManufacturers(req, res) {
 }
 
 async function getManufacturer(req, res) {
-  const manufacturer = await db.getManufacturer(req.params.id);
+  const { id } = req.params;
+  const [manufacturer, products] = await Promise.all([
+    db.getManufacturer(id),
+    db.getAllProductsForManufacturer(id),
+  ]);
   res.render('manufacturers/manufacturer', {
     title: 'A singular manufacturer',
     manufacturer,
+    products,
   });
 }
 
