@@ -130,6 +130,10 @@ textarea {
   object-fit: contain;
 }
 
+.grid--center-align {
+  align-items: center;
+}
+
 .manufacturer-header img {
   padding: 1rem;
   width: 350px;
