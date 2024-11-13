@@ -8,12 +8,15 @@
       <% if (locals.products != null && products.length > 0) { %>
         <%- include('../partials/productsGrid.ejs', { products }) %>
       <% }; %>
-      <a href="/category/<%= category.id %>/edit">
-        <button type="button">Edit</button>
-      </a>
-      <form action="/category/<%= category.id %>/delete" method="post">
-        <button type="submit">Delete</button>
-      </form>
+      <h1>Settings</h1>
+      <div class="settings-buttons">
+        <a href="/category/<%= category.id %>/edit">
+          <button type="button">Edit</button>
+        </a>
+        <form action="/category/<%= category.id %>/delete" method="post">
+          <button type="submit">Delete</button>
+        </form>
+      </div>
     </div>
   </body>
 </html>

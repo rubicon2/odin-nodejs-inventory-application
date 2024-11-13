@@ -12,9 +12,12 @@
       <% } else { %>
         <div>No products found.</div>
       <% }; %>
-      <a href="/manufacturer/<%= manufacturer.id %>/edit">
-        <button type="button">Edit</button>
-      </a>
+      <h1>Settings</h1>
+      <div class="settings-buttons">
+        <a href="/manufacturer/<%= manufacturer.id %>/edit">
+          <button type="button">Edit</button>
+        </a>
+      </div>
     </div>
   </body>
 </html>
