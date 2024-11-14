@@ -100,6 +100,10 @@ textarea {
   clear: both;
 }
 
+body {
+  background-color: #ededed;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -107,16 +111,18 @@ textarea {
 }
 .grid .grid-product,
 .grid .grid-category {
-  border: 2px solid #eeeeee;
   border-radius: 5px;
   padding: 1rem;
-  box-shadow: 5px 5px 5px 5px rgba(102, 102, 102, 0.0392156863);
-  background-color: white;
+  box-shadow: 5px 5px 5px 5px rgba(102, 102, 102, 0.062745098);
+  background-color: #f1f1f1;
+  outline: 5px solid rgba(255, 255, 255, 0);
   transition: filter 0.2s;
+  transition: outline 0.2s;
 }
 .grid .grid-product:hover,
 .grid .grid-category:hover {
-  filter: brightness(0.9);
+  filter: brightness(0.95);
+  outline: 5px solid rgba(221, 221, 221, 0.3333333333);
 }
 .grid .grid-product a,
 .grid .grid-category a {
@@ -130,8 +136,19 @@ textarea {
   object-fit: contain;
 }
 
+.product {
+  color: var(--main-text-color);
+}
+.product h1, .product h2, .product h3, .product h4, .product h5, .product h6 {
+  color: var(--secondary-text-color);
+}
+
 .grid--center-align {
   align-items: center;
+}
+
+.product-grid-item_header h1, .product-grid-item_header h2, .product-grid-item_header h3, .product-grid-item_header h4, .product-grid-item_header h5, .product-grid-item_header h6 {
+  margin: 0.3em 0;
 }
 
 .manufacturer-header img {

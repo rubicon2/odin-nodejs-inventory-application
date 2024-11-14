@@ -147,8 +147,22 @@ textarea {
   }
 }
 
+.product {
+  color: var(--main-text-color);
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--secondary-text-color);
+  }
+}
+
 .grid--center-align {
   align-items: center;
+}
+
+.product-grid-item_header {
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0.3em 0;
+  }
 }
 
 .manufacturer-header {
