@@ -122,16 +122,18 @@ textarea {
 
   .grid-product,
   .grid-category {
-    border: 2px solid #eeeeeeff;
     border-radius: 5px;
     padding: 1rem;
-    box-shadow: 5px 5px 5px 5px #6666660a;
-    background-color: white;
+    box-shadow: 5px 5px 5px 5px #66666610;
+    background-color: #f1f1f1;
+    outline: 5px solid #ffffff00;
 
     transition: filter 0.2s;
+    transition: outline 0.2s;
     
     &:hover {
-      filter: brightness(0.9);
+      filter: brightness(0.95);
+      outline: 5px solid #dddddd55;
     }
 
     a {
