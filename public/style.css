@@ -152,6 +152,18 @@ body {
   grid-template-columns: 1fr 150px;
   gap: 2rem;
 }
+.product-page__header-bar h1 {
+  align-self: end;
+}
+.product-page__header-bar img {
+  height: 50px;
+}
+
+.product-page__info {
+  position: sticky;
+  top: 5rem;
+  height: min-content;
+}
 
 .grid--center-align {
   align-items: center;
@@ -176,10 +188,13 @@ body {
   margin-bottom: 1rem;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 565px) {
   .main-nav ul {
     flex-direction: column;
     align-items: center;
+  }
+  .product-page__info {
+    position: static;
   }
 }
 
