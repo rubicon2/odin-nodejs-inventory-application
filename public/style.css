@@ -15,7 +15,7 @@ h5,
 h6 {
   font-family: "Monserrat", sans-serif;
   line-height: 1em;
-  margin-bottom: 0.3em;
+  margin-bottom: 0.5em;
 }
 
 .list-no-style {
@@ -145,6 +145,12 @@ body {
 }
 .product h1, .product h2, .product h3, .product h4, .product h5, .product h6 {
   color: var(--secondary-text-color);
+}
+
+.product-page__header-bar {
+  display: grid;
+  grid-template-columns: 1fr 150px;
+  gap: 2rem;
 }
 
 .grid--center-align {
