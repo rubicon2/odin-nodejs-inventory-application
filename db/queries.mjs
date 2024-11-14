@@ -22,9 +22,24 @@ async function getAllProducts() {
 }
 
 async function getProduct(id) {
-  const { rows } = await pool.query('SELECT * FROM products WHERE id = $1', [
-    id,
-  ]);
+  const { rows } = await pool.query(
+    `
+    SELECT
+      p.id,
+      p.manufacturer_id,
+      m.id AS manufacturer_id,
+      m.name AS manufacturer_name,
+      m.img_url AS manufacturer_img_url,
+      p.name,
+      p.available,
+      p.price,
+      p.description
+    FROM products AS p
+    LEFT JOIN manufacturers AS m ON m.id = p.manufacturer_id
+    WHERE p.id = $1
+    `,
+    [id],
+  );
   return rows[0];
 }
 

@@ -165,6 +165,12 @@ body {
   }
 }
 
+.product-page__header-bar {
+  display: grid;
+  grid-template-columns: 1fr 150px;
+  gap: 2rem;
+}
+
 .grid--center-align {
   align-items: center;
 }
