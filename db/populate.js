@@ -16,7 +16,7 @@ const SQL = `
     name VARCHAR ( 255 ) NOT NULL,
     available BOOL NOT NULL,
     price NUMERIC NOT NULL,
-    description TEXT,
+    description TEXT
   );
 
   CREATE TABLE IF NOT EXISTS categories (
