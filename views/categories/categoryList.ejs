@@ -3,14 +3,16 @@
 <%- include('../partials/head.ejs') %>
   <body>
     <%- include('../partials/nav.ejs') %>
-    <h1>Categories!</h1>
-    <ul>
-      <% categories.forEach((category) => { %>
-        <li>
-          <%- include('./categoryListCategory.ejs', {category}) %>
-        </li>
-      <% }) %>
-    </ul>
-    <a href="/category/new">Add a new category</a>
+    <div class="container section-top-padding section-bottom-padding">
+      <h1>Categories</h1>
+      <ul class="list-no-style grid section-bottom-padding">
+        <% categories.forEach((category) => { %>
+          <li class="grid-category">
+            <%- include('./categoryListCategory.ejs', {category}) %>
+          </li>
+        <% }) %>
+      </ul>
+      <a href="/category/new">Add a new category</a>
+    </div>
   </body>
 </html>

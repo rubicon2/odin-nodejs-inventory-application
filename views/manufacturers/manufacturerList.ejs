@@ -3,14 +3,16 @@
 <%- include('../partials/head.ejs') %>
   <body>
     <%- include('../partials/nav.ejs') %>
-    <h1>Manufacturers!</h1>
-    <ul>
-      <% manufacturers.forEach((manufacturer)=> { %>
-        <li>
-          <%- include('./manufacturerListManufacturer.ejs', {manufacturer}) %>
-        </li>
-        <% }) %>
-    </ul>
-    <a href="/manufacturer/new">Add a new manufacturer</a>
+    <div class="container section-top-padding section-bottom-padding">
+      <h1>Manufacturers</h1>
+      <ul class="list-no-style manufacturer-grid section-bottom-padding grid--center-align">
+        <% manufacturers.forEach((manufacturer)=> { %>
+          <li>
+            <%- include('./manufacturerListManufacturer.ejs', {manufacturer}) %>
+          </li>
+          <% }) %>
+      </ul>
+      <a href="/manufacturer/new">Add a new manufacturer</a>
+    </div>
   </body>
 </html>

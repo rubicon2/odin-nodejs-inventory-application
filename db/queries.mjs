@@ -1,14 +1,45 @@
 import pool from './pool.mjs';
 
 async function getAllProducts() {
-  const { rows } = await pool.query('SELECT * FROM products ORDER BY name');
+  const { rows } = await pool.query(`
+    SELECT *
+    FROM (
+      SELECT DISTINCT ON (id)
+        p.id AS id,
+        p.manufacturer_id,
+        p.name AS name,
+        p.available,
+        p.price,
+        p.description,
+        pi.img_url,
+        pi.alt_text
+      FROM products AS p
+      LEFT JOIN product_images AS pi ON pi.product_id = p.id
+    ) AS result
+    ORDER BY result.name;
+  `);
   return rows;
 }
 
 async function getProduct(id) {
-  const { rows } = await pool.query('SELECT * FROM products WHERE id = $1', [
-    id,
-  ]);
+  const { rows } = await pool.query(
+    `
+    SELECT
+      p.id,
+      p.manufacturer_id,
+      m.id AS manufacturer_id,
+      m.name AS manufacturer_name,
+      m.img_url AS manufacturer_img_url,
+      p.name,
+      p.available,
+      p.price,
+      p.description
+    FROM products AS p
+    LEFT JOIN manufacturers AS m ON m.id = p.manufacturer_id
+    WHERE p.id = $1
+    `,
+    [id],
+  );
   return rows[0];
 }
 
@@ -47,7 +78,31 @@ async function getAllManufacturers() {
   const { rows } = await pool.query(
     'SELECT * FROM manufacturers ORDER BY name',
   );
-  console.log('ROWS:', rows);
+  return rows;
+}
+
+async function getAllProductsForManufacturer(id) {
+  const { rows } = await pool.query(
+    `
+    SELECT *
+    FROM (
+      SELECT DISTINCT ON (id)
+        p.id AS id,
+        p.manufacturer_id,
+        p.name AS name,
+        p.available,
+        p.price,
+        p.description,
+        pi.img_url,
+        pi.alt_text
+      FROM products AS p
+      LEFT JOIN product_images AS pi ON pi.product_id = p.id
+      WHERE manufacturer_id = $1
+    ) AS result
+    ORDER BY result.name;
+  `,
+    [id],
+  );
   return rows;
 }
 
@@ -90,17 +145,20 @@ async function getCategory(id) {
 }
 
 async function addCategory(category) {
-  const { name } = category;
+  const { name, img_url } = category;
   const { rows } = await pool.query(
-    'INSERT INTO categories (name) VALUES ($1) RETURNING *',
-    [name],
+    'INSERT INTO categories (name, img_url) VALUES ($1, $2) RETURNING *',
+    [name, img_url],
   );
   return rows[0];
 }
 
 async function updateCategory(id, updates) {
-  const { name } = updates;
-  await pool.query('UPDATE categories SET name = $1 WHERE id = $2', [name, id]);
+  const { name, img_url } = updates;
+  await pool.query(
+    'UPDATE categories SET name = $1, img_url = $2 WHERE id = $3',
+    [name, img_url, id],
+  );
 }
 
 async function deleteCategory(id) {
@@ -157,8 +215,34 @@ async function updateCategoriesForProduct(product_id, category_ids) {
 }
 
 async function getAllProductsInCategory(id) {
+  // Why does it need to be distinct on id AND category id?
+  // This is because if you only select it to have a DISTINCT id,
+  // if there is more than one row with different category_ids, all but one of
+  // those will effectively be discarded - and the one left may not
+  // necessarily relate to the category we are querying for!
+  // So ensure all rows with all categories are returned from the subquery,
+  // and filter out with the final WHERE on the resulting set.
   const { rows } = await pool.query(
-    'SELECT * FROM products JOIN product_categories ON product_categories.product_id = products.id WHERE product_categories.category_id = $1',
+    `
+    SELECT *
+    FROM (
+      SELECT DISTINCT ON (id, category_id)
+        p.id AS id,
+        p.manufacturer_id,
+        p.name AS name,
+        p.available,
+        p.price,
+        p.description,
+        pi.img_url,
+        pi.alt_text,
+        pc.category_id
+      FROM products AS p
+      LEFT JOIN product_images AS pi ON pi.product_id = p.id
+      LEFT JOIN product_categories AS pc ON p.id = pc.product_id
+    ) AS result
+    WHERE category_id = $1
+    ORDER BY result.name;
+  `,
     [id],
   );
   return rows;
@@ -207,6 +291,7 @@ export {
   getManufacturer,
   addManufacturer,
   updateManufacturer,
+  getAllProductsForManufacturer,
   getAllCategories,
   getCategory,
   addCategory,

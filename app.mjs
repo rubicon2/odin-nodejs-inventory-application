@@ -20,11 +20,7 @@ app.use('/manufacturer', manufacturerRouter);
 app.use('/category', categoryRouter);
 
 app.get('/', async (req, res) => {
-  const products = await db.getAllProducts();
-  res.render('index', {
-    title: 'Hello, world!',
-    products,
-  });
+  res.status(303).redirect('/product');
 });
 
 // If no prior routes have been matched, show 404.

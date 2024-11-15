@@ -5,6 +5,7 @@
   "main": "app.mjs",
   "scripts": {
     "dev": "node --watch app.mjs",
+    "sass": "sass --watch style.scss public/style.css",
     "start": "node app.mjs"
   },
   "author": "",
@@ -14,7 +15,8 @@
     "eslint": "^9.13.0",
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.11.0",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "sass": "^1.80.6"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

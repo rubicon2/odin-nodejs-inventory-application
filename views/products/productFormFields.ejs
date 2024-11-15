@@ -1,29 +1,32 @@
-<label for="name">Name: </label>
-<input type="text" name="name" id="name" required value="<%= locals.product != null ? product.name : '' %>">
-<label for="manufacturer_id">Manufacturer: </label>
-<select name="manufacturer_id" id="manufacturer_id" required>
-  <% manufacturers.forEach((manufacturer) => { %>
-    <option value="<%= manufacturer.id %>" <%- locals.product != null && manufacturer.id == product.manufacturer_id ? 'selected' : '' %>><%= manufacturer.name %></option>
-  <% }); %>
-</select>
-<label for="price">Price: </label>
-<input type="text" name="price" id="price" inputmode="numeric" pattern="\d+.\d{2}" required value="<%= locals.product != null ? product.price : '' %>">
-<label for="description">Description: </label>
-<textarea name="description" id="description" placeholder="Describe the item..."><%= locals.product != null ? product.description : '' %></textarea>
-<label for="available">Available: </label>
-<input type="checkbox" name="available" id="available" <%- locals.product != null && !product.available ? '' : 'checked' %>>
-<% if (locals.images && images.length > 0) { %>
-  <label for="existing_images">Existing images: </label>
-  <% images.forEach((image) => { %>
-    <ul>
-      <li>
-        <img src="/<%= image.img_url %>" alt="">
-      </li>
-    </ul>
-  <% }); %>
-<% }; %>
-<select name="category_ids[]" id="category_ids" multiple>
-  <% categories.forEach((category) => { %>
-    <option value="<%= category.id %>" <%- locals.product != null && selectedCategoryIds.includes(category.id) ? 'selected' : '' %>><%= category.name %></option>
-  <% }); %>
-</select>
+<div class="form-row">
+  <label for="name">Name: </label>
+  <input type="text" name="name" id="name" required value="<%= locals.product != null ? product.name : '' %>">
+</div>
+<div class="form-row">
+  <label for="manufacturer_id">Manufacturer: </label>
+  <select name="manufacturer_id" id="manufacturer_id" required>
+    <% manufacturers.forEach((manufacturer) => { %>
+      <option value="<%= manufacturer.id %>" <%- locals.product != null && manufacturer.id == product.manufacturer_id ? 'selected' : '' %>><%= manufacturer.name %></option>
+    <% }); %>
+  </select>
+</div>
+<div class="form-row">
+  <label for="price">Price: </label>
+  <input type="text" name="price" id="price" inputmode="numeric" pattern="\d+.\d{2}" required value="<%= locals.product != null ? product.price : '' %>">
+</div>
+<div class="form-row">
+  <label for="description">Description: </label>
+  <textarea name="description" id="description" placeholder="Describe the item..." rows="10"><%= locals.product != null ? product.description : '' %></textarea>
+</div>
+<div class="form-row-h">
+  <label for="available">Available: </label>
+  <input type="checkbox" name="available" id="available" <%- locals.product != null && !product.available ? '' : 'checked' %>>
+</div>
+<div class="form-row">
+  <label for="category_ids[]">Categories: </label>
+  <select name="category_ids[]" id="category_ids" multiple>
+    <% categories.forEach((category) => { %>
+      <option value="<%= category.id %>" <%- locals.product != null && selectedCategoryIds.includes(category.id) ? 'selected' : '' %>><%= category.name %></option>
+    <% }); %>
+  </select>
+</div>
