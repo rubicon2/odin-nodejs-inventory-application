@@ -1,3 +1,7 @@
 <a href="/manufacturer/<%= manufacturer.id %>">
-  <img src="/<%= manufacturer.img_url %>" alt="<%= manufacturer.name %> logo">
+  <% if (manufacturer.img_data != null) { %>
+    <img src="data:<%= manufacturer.img_type %>;base64,<%= manufacturer.img_data %>" alt="<%= manufacturer.name %>">
+  <% } else { %>
+    <img src="/public/no_img.png" alt="<%= manufacturer.name %>">
+  <% } %>
 </a>

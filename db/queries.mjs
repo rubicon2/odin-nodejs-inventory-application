@@ -93,7 +93,8 @@ async function getAllProductsForManufacturer(id) {
         p.available,
         p.price,
         p.description,
-        pi.img_url,
+        pi.img_data,
+        pi.img_type,
         pi.alt_text
       FROM products AS p
       LEFT JOIN product_images AS pi ON pi.product_id = p.id
@@ -116,19 +117,19 @@ async function getManufacturer(id) {
 }
 
 async function addManufacturer(manufacturer) {
-  const { name, description, img_url } = manufacturer;
+  const { name, description, img_data, img_type } = manufacturer;
   const { rows } = await pool.query(
-    'INSERT INTO manufacturers (name, description, img_url) VALUES ($1, $2, $3) RETURNING *',
-    [name, description, img_url],
+    'INSERT INTO manufacturers (name, description, img_data, img_type) VALUES ($1, $2, $3, $4) RETURNING *',
+    [name, description, img_data, img_type],
   );
   return rows[0];
 }
 
 async function updateManufacturer(id, updates) {
-  const { name, description, img_url } = updates;
+  const { name, description, img_data, img_type } = updates;
   await pool.query(
-    `UPDATE manufacturers SET name = $1, description = $2, img_url = $3 WHERE id = $4`,
-    [name, description, img_url, id],
+    `UPDATE manufacturers SET name = $1, description = $2, img_data = $3, img_type = $4 WHERE id = $5`,
+    [name, description, img_data, img_type, id],
   );
 }
 

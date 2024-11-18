@@ -1,5 +1,4 @@
 import * as db from '../db/queries.mjs';
-import fs from 'node:fs/promises';
 
 async function getManufacturers(req, res) {
   const manufacturers = await db.getAllManufacturers();
@@ -28,11 +27,19 @@ function getNewManufacturerForm(req, res) {
 
 async function postNewManufacturerForm(req, res) {
   const { name, description } = req.body;
-  const img_url = req.file.path;
+
+  let buffer = null;
+  let mimetype = null;
+  if (req.file) {
+    buffer = req.file.buffer.toString('base64');
+    mimetype = req.file.mimetype;
+  }
+
   const { id } = await db.addManufacturer({
     name,
     description,
-    img_url,
+    img_data: buffer,
+    img_type: mimetype,
   });
   res.status(303).redirect(`/manufacturer/${id}`);
 }
@@ -52,20 +59,29 @@ async function getEditManufacturerForm(req, res) {
 async function postEditManufacturerForm(req, res) {
   const id = req.params.id;
 
-  let img_url = '';
-  let { img_url: previous_img_url } = await db.getManufacturer(id);
+  let buffer = null;
+  let mimetype = null;
+  let { img_data: previous_img_data, img_type: previous_img_type } =
+    await db.getManufacturer(id);
   if (req.file) {
-    img_url = req.file.path;
-    // Delete previous logo file if there is a new file to upload.
-    fs.unlink(previous_img_url).catch((error) => console.error(error));
+    // If a file was added in the form, use it.
+    buffer = req.file.buffer.toString('base64');
+    mimetype = req.file.mimetype;
   } else {
-    // If no new file in req, just re-use old one.
-    img_url = previous_img_url;
+    // If no new file in the form, just re-use old one.
+    buffer = previous_img_data;
+    mimetype = previous_img_type;
   }
 
   // Update with the new details.
   const { name, description } = req.body;
-  await db.updateManufacturer(id, { id, name, description, img_url });
+  await db.updateManufacturer(id, {
+    id,
+    name,
+    description,
+    img_data: buffer,
+    img_type: mimetype,
+  });
   res.status(303).redirect(`/manufacturer/${id}`);
 }
 
