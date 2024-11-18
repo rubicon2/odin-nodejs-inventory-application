@@ -3,5 +3,9 @@
     <h3><%= product.name %></h3>
     £<%= product.price %>
   </div>
-  <img src="/<%= product.img_url || 'public/no_img.png' %>" alt="<%= product.alt_text %>">
+  <% if (product.img_data) { %>
+    <img src="data:<%= product.img_type %>;base64,<%= product.img_data %>" alt="<%= product.alt_text %>">
+  <% } else { %>
+    <img src="public/no_img.png" alt="<%= product.alt_text %>">
+  <% } %>
 </a>

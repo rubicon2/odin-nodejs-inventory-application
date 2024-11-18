@@ -3,19 +3,7 @@ import * as productController from '../controllers/productController.mjs';
 import multer from 'multer';
 
 const appRouter = Router();
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/products');
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const fileExtension = file.mimetype.slice(-3);
-    const fileName = file.fieldname + '-' + uniqueSuffix + '.' + fileExtension;
-    cb(null, fileName);
-  },
-});
-const upload = multer({ storage });
+const upload = multer({ storage: multer.memoryStorage() });
 
 appRouter.get('/', productController.getProducts);
 appRouter.get('/new', productController.getNewProductForm);

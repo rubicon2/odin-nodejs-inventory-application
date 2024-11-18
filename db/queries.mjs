@@ -11,7 +11,8 @@ async function getAllProducts() {
         p.available,
         p.price,
         p.description,
-        pi.img_url,
+        pi.img_data,
+        pi.img_type,
         pi.alt_text
       FROM products AS p
       LEFT JOIN product_images AS pi ON pi.product_id = p.id
@@ -29,7 +30,8 @@ async function getProduct(id) {
       p.manufacturer_id,
       m.id AS manufacturer_id,
       m.name AS manufacturer_name,
-      m.img_url AS manufacturer_img_url,
+      m.img_data AS manufacturer_img_data,
+      m.img_type AS manufacturer_img_type,
       p.name,
       p.available,
       p.price,
@@ -271,10 +273,10 @@ async function getAllImagesForProduct(id) {
   return rows;
 }
 
-async function addProductImage(product_id, img_url, alt_text) {
+async function addProductImage(product_id, img_data, img_type, alt_text) {
   const { rows } = await pool.query(
-    'INSERT INTO product_images (product_id, img_url, alt_text) VALUES ($1, $2, $3)',
-    [product_id, img_url, alt_text],
+    'INSERT INTO product_images (product_id, img_data, img_type, alt_text) VALUES ($1, $2, $3, $4)',
+    [product_id, img_data, img_type, alt_text],
   );
   return rows;
 }
