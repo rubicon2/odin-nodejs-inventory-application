@@ -145,19 +145,19 @@ async function getCategory(id) {
 }
 
 async function addCategory(category) {
-  const { name, img_url } = category;
+  const { name, img_data, img_type } = category;
   const { rows } = await pool.query(
-    'INSERT INTO categories (name, img_url) VALUES ($1, $2) RETURNING *',
-    [name, img_url],
+    'INSERT INTO categories (name, img_data, img_type) VALUES ($1, $2, $3) RETURNING *',
+    [name, img_data, img_type],
   );
   return rows[0];
 }
 
 async function updateCategory(id, updates) {
-  const { name, img_url } = updates;
+  const { name, img_data, img_type } = updates;
   await pool.query(
-    'UPDATE categories SET name = $1, img_url = $2 WHERE id = $3',
-    [name, img_url, id],
+    'UPDATE categories SET name = $1, img_data = $2, img_type = $3 WHERE id = $4',
+    [name, img_data, img_type, id],
   );
 }
 
@@ -233,7 +233,8 @@ async function getAllProductsInCategory(id) {
         p.available,
         p.price,
         p.description,
-        pi.img_url,
+        pi.img_data,
+        pi.img_type,
         pi.alt_text,
         pc.category_id
       FROM products AS p
