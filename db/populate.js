@@ -7,7 +7,8 @@ const SQL = `
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name VARCHAR ( 255 ) NOT NULL UNIQUE,
     description TEXT,
-    img_url VARCHAR ( 255 )
+    img_data BYTEA,
+    img_type VARCHAR ( 20 )
   );
 
   CREATE TABLE IF NOT EXISTS products (
@@ -22,7 +23,8 @@ const SQL = `
   CREATE TABLE IF NOT EXISTS categories (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name VARCHAR ( 255 ) NOT NULL UNIQUE,
-    img_url VARCHAR ( 255 ) NOT NULL
+    img_data BYTEA NOT NULL,
+    img_type VARCHAR ( 20 ) NOT NULL
   );
 
   CREATE TABLE IF NOT EXISTS product_categories (
@@ -37,7 +39,8 @@ const SQL = `
   CREATE TABLE IF NOT EXISTS product_images (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     product_id INTEGER REFERENCES products ( id ) ON DELETE CASCADE,
-    img_url VARCHAR ( 255 ) NOT NULL,
+    img_data BYTEA NOT NULL,
+    img_type VARCHAR ( 20 ) NOT NULL,
     alt_text VARCHAR ( 255 ) NOT NULL
   );
 

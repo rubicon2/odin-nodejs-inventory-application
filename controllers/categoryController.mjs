@@ -1,5 +1,4 @@
 import * as db from '../db/queries.mjs';
-import fs from 'node:fs/promises';
 
 async function getCategories(req, res) {
   const categories = await db.getAllCategories();
@@ -27,10 +26,11 @@ async function getNewCategoryForm(req, res) {
 
 async function postNewCategoryForm(req, res) {
   const { name } = req.body;
-  const img_url = req.file.path;
+  const { buffer, mimetype } = req.file;
   const { id } = await db.addCategory({
     name,
-    img_url,
+    img_data: buffer.toString('base64'),
+    img_type: mimetype,
   });
   res.status(303).redirect(`/category/${id}`);
 }
@@ -46,22 +46,26 @@ async function getEditCategoryForm(req, res) {
 async function postEditCategoryForm(req, res) {
   const id = req.params.id;
 
-  let img_url = '';
-  let { img_url: previous_img_url } = await db.getCategory(id);
+  let buffer = null;
+  let mimetype = null;
+  let { img_data: previous_img_data, img_type: previous_img_type } =
+    await db.getCategory(id);
   if (req.file) {
-    img_url = req.file.path;
-    // Delete previous logo file if there is a new file to upload.
-    fs.unlink(previous_img_url).catch((error) => console.error(error));
+    // If a file was added in the form, use it.
+    buffer = req.file.buffer.toString('base64');
+    mimetype = req.file.mimetype;
   } else {
-    // If no new file in req, just re-use old one.
-    img_url = previous_img_url;
+    // If no new file in the form, just re-use old one.
+    buffer = previous_img_data;
+    mimetype = previous_img_type;
   }
 
   const { name } = req.body;
   await db.updateCategory(id, {
     id,
     name,
-    img_url,
+    img_data: buffer,
+    img_type: mimetype,
   });
   res.status(303).redirect(`/category/${id}`);
 }

@@ -6,7 +6,11 @@
     <div class="container section-top-padding section-bottom-padding">
       <h1><%= manufacturer.name %></h1>
       <div class="manufacturer-header section-bottom-padding">
-        <img src="/<%= manufacturer.img_url || '/public/no_img.png' %>" alt="<%= manufacturer.name %>">
+        <% if (manufacturer.img_data != null) { %>
+          <img src="data:<%= manufacturer.img_type %>;base64,<%= manufacturer.img_data %>" alt="<%= manufacturer.name %>">
+        <% } else { %>
+          <img src="/public/no_img.png" alt="<%= manufacturer.name %>">
+        <% } %>
         <p><%= manufacturer.description %></p>
       </div>
       <h2 class="clear-both">Products</h2>

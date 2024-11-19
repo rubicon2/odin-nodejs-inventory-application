@@ -11,7 +11,8 @@ async function getAllProducts() {
         p.available,
         p.price,
         p.description,
-        pi.img_url,
+        pi.img_data,
+        pi.img_type,
         pi.alt_text
       FROM products AS p
       LEFT JOIN product_images AS pi ON pi.product_id = p.id
@@ -29,7 +30,8 @@ async function getProduct(id) {
       p.manufacturer_id,
       m.id AS manufacturer_id,
       m.name AS manufacturer_name,
-      m.img_url AS manufacturer_img_url,
+      m.img_data AS manufacturer_img_data,
+      m.img_type AS manufacturer_img_type,
       p.name,
       p.available,
       p.price,
@@ -93,7 +95,8 @@ async function getAllProductsForManufacturer(id) {
         p.available,
         p.price,
         p.description,
-        pi.img_url,
+        pi.img_data,
+        pi.img_type,
         pi.alt_text
       FROM products AS p
       LEFT JOIN product_images AS pi ON pi.product_id = p.id
@@ -116,19 +119,19 @@ async function getManufacturer(id) {
 }
 
 async function addManufacturer(manufacturer) {
-  const { name, description, img_url } = manufacturer;
+  const { name, description, img_data, img_type } = manufacturer;
   const { rows } = await pool.query(
-    'INSERT INTO manufacturers (name, description, img_url) VALUES ($1, $2, $3) RETURNING *',
-    [name, description, img_url],
+    'INSERT INTO manufacturers (name, description, img_data, img_type) VALUES ($1, $2, $3, $4) RETURNING *',
+    [name, description, img_data, img_type],
   );
   return rows[0];
 }
 
 async function updateManufacturer(id, updates) {
-  const { name, description, img_url } = updates;
+  const { name, description, img_data, img_type } = updates;
   await pool.query(
-    `UPDATE manufacturers SET name = $1, description = $2, img_url = $3 WHERE id = $4`,
-    [name, description, img_url, id],
+    `UPDATE manufacturers SET name = $1, description = $2, img_data = $3, img_type = $4 WHERE id = $5`,
+    [name, description, img_data, img_type, id],
   );
 }
 
@@ -145,19 +148,19 @@ async function getCategory(id) {
 }
 
 async function addCategory(category) {
-  const { name, img_url } = category;
+  const { name, img_data, img_type } = category;
   const { rows } = await pool.query(
-    'INSERT INTO categories (name, img_url) VALUES ($1, $2) RETURNING *',
-    [name, img_url],
+    'INSERT INTO categories (name, img_data, img_type) VALUES ($1, $2, $3) RETURNING *',
+    [name, img_data, img_type],
   );
   return rows[0];
 }
 
 async function updateCategory(id, updates) {
-  const { name, img_url } = updates;
+  const { name, img_data, img_type } = updates;
   await pool.query(
-    'UPDATE categories SET name = $1, img_url = $2 WHERE id = $3',
-    [name, img_url, id],
+    'UPDATE categories SET name = $1, img_data = $2, img_type = $3 WHERE id = $4',
+    [name, img_data, img_type, id],
   );
 }
 
@@ -233,7 +236,8 @@ async function getAllProductsInCategory(id) {
         p.available,
         p.price,
         p.description,
-        pi.img_url,
+        pi.img_data,
+        pi.img_type,
         pi.alt_text,
         pc.category_id
       FROM products AS p
@@ -269,10 +273,10 @@ async function getAllImagesForProduct(id) {
   return rows;
 }
 
-async function addProductImage(product_id, img_url, alt_text) {
+async function addProductImage(product_id, img_data, img_type, alt_text) {
   const { rows } = await pool.query(
-    'INSERT INTO product_images (product_id, img_url, alt_text) VALUES ($1, $2, $3)',
-    [product_id, img_url, alt_text],
+    'INSERT INTO product_images (product_id, img_data, img_type, alt_text) VALUES ($1, $2, $3, $4)',
+    [product_id, img_data, img_type, alt_text],
   );
   return rows;
 }

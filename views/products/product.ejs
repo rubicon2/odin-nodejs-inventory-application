@@ -7,7 +7,7 @@
       <div class="product-page__header-bar">
         <h1><%= product.name %></h1>
         <a href="/manufacturer/<%= product.manufacturer_id %>">
-          <img src="/<%= product.manufacturer_img_url %>" alt="Visit <%= product.manufacturer_name %> page">
+          <img src="data:<%= product.manufacturer_img_type %>;base64,<%= product.manufacturer_img_data %>" alt=" Visit <%= product.manufacturer_name %>'s page">
         </a>
       </div>
       <div class="grid product">
@@ -43,11 +43,11 @@
         <div>
           <h2>Images</h2>
           <ul class="list-no-style image-list">
-            <% if (locals.images !=null && images.length> 0) { %>
+            <% if (locals.images != null && images.length> 0) { %>
               <% images.forEach((image) => { %>
                 <li>
                   <h3><%= image.alt_text %></h3>
-                  <img src="/<%= image.img_url %>" alt="<%= image.alt_text %>">
+                  <img src="data:<%= image.img_type %>;base64,<%= image.img_data %>" alt="<%= image.alt_text %>">
                   <form action="/product/<%= product.id %>/image/<%= image.id %>/delete" method="post">
                     <button type="submit">Delete</button>
                   </form>
