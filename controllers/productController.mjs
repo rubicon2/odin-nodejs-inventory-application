@@ -2,7 +2,11 @@ import * as db from '../db/queries.mjs';
 
 async function getProducts(req, res) {
   const products = await db.getAllProducts();
-  res.render('products/productList', { title: 'Products', products });
+  res.render('products/productList', {
+    title: 'Products',
+    products,
+    isLoggedIn: req.session.isLoggedIn,
+  });
 }
 
 async function getProduct(req, res) {
@@ -17,6 +21,7 @@ async function getProduct(req, res) {
     product,
     categories,
     images,
+    isLoggedIn: req.session.isLoggedIn,
   });
 }
 
@@ -30,6 +35,7 @@ async function getNewProductForm(req, res) {
     title: 'New product',
     manufacturers,
     categories,
+    isLoggedIn: req.session.isLoggedIn,
   });
 }
 
@@ -42,6 +48,7 @@ async function postNewProductForm(req, res) {
     price,
     description,
     available,
+    isLoggedIn: req.session.isLoggedIn,
   });
   await db.addCategoriesForProduct(id, category_ids);
   res.status(303).redirect(`/product/${id}`);
@@ -67,6 +74,7 @@ async function getEditProductForm(req, res) {
     images,
     categories,
     selectedCategoryIds,
+    isLoggedIn: req.session.isLoggedIn,
   });
 }
 

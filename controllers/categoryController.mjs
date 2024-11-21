@@ -2,7 +2,11 @@ import * as db from '../db/queries.mjs';
 
 async function getCategories(req, res) {
   const categories = await db.getAllCategories();
-  res.render('categories/categoryList', { title: 'Categories', categories });
+  res.render('categories/categoryList', {
+    title: 'Categories',
+    categories,
+    isLoggedIn: req.session.isLoggedIn,
+  });
 }
 
 async function getCategory(req, res) {
@@ -15,13 +19,18 @@ async function getCategory(req, res) {
     title: 'A singular category',
     category,
     products,
+    isLoggedIn: req.session.isLoggedIn,
   });
 }
 
 async function getNewCategoryForm(req, res) {
   // Get list of manufacturers from database to populate dropdown list in form.
   const categories = await db.getAllCategories();
-  res.render('categories/newCategory', { title: 'New category', categories });
+  res.render('categories/newCategory', {
+    title: 'New category',
+    categories,
+    isLoggedIn: req.session.isLoggedIn,
+  });
 }
 
 async function postNewCategoryForm(req, res) {
@@ -40,6 +49,7 @@ async function getEditCategoryForm(req, res) {
   res.render(`categories/editCategory`, {
     title: 'Edit category',
     category,
+    isLoggedIn: req.session.isLoggedIn,
   });
 }
 

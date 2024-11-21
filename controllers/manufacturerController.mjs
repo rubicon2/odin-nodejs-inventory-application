@@ -5,6 +5,7 @@ async function getManufacturers(req, res) {
   res.render('manufacturers/manufacturerList', {
     title: 'Manufacturers',
     manufacturers,
+    isLoggedIn: req.session.isLoggedIn,
   });
 }
 
@@ -18,6 +19,7 @@ async function getManufacturer(req, res) {
     title: 'A singular manufacturer',
     manufacturer,
     products,
+    isLoggedIn: req.session.isLoggedIn,
   });
 }
 
@@ -53,6 +55,7 @@ async function getEditManufacturerForm(req, res) {
     title: 'Edit manufacturer',
     manufacturer,
     manufacturers,
+    isLoggedIn: req.session.isLoggedIn,
   });
 }
 
