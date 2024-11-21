@@ -8,7 +8,9 @@
       <% if (locals.products != null) { %>
         <%- include('../partials/productsGrid.ejs', { products }) %>
       <% }; %>
-      <a href="/product/new">Add a new product</a>
+      <% if (isLoggedIn) { %>
+        <a href="/product/new">Add a new product</a>
+      <% } %>
     </div>
   </body>
 </html>
