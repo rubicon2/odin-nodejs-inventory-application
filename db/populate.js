@@ -2,7 +2,20 @@
 
 const { Client } = require('pg');
 
-const SQL = `  
+const SQL = `
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    username VARCHAR ( 128 ) NOT NULL UNIQUE,
+    password_salt VARCHAR ( 64 ) NOT NULL,
+    password_hash VARCHAR ( 64 ) NOT NULL
+  );
+
+  INSERT INTO users ( username, password_salt, password_hash ) VALUES (
+    'lemon',
+    '488fd974e96af67e3d41e1b3316712832a7573a0b3d82e263846dd9f274e1065',
+    '86b913d76ca41c07a1144882f13b54d3de95ad895fdd496833bc55eba9fd2777'
+  ) ON CONFLICT DO NOTHING;
+
   CREATE TABLE IF NOT EXISTS manufacturers (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name VARCHAR ( 255 ) NOT NULL UNIQUE,
