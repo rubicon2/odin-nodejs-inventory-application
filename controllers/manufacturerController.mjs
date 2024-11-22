@@ -28,7 +28,10 @@ function getNewManufacturerForm(req, res, next) {
     const { isLoggedIn } = req.session;
     if (!isLoggedIn) throw new Error('You are not logged in.');
 
-    res.render('manufacturers/newManufacturer', { title: 'New manufacturer' });
+    res.render('manufacturers/newManufacturer', {
+      title: 'New manufacturer',
+      isLoggedIn,
+    });
   } catch (error) {
     next(error);
   }
