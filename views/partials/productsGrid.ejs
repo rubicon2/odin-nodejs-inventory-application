@@ -1,7 +1,13 @@
-<ul class="list-no-style grid section-bottom-padding">
-  <% products.forEach((product)=> { %>
-    <li class="grid-product">
-      <%- include('./productsGridItem.ejs', { product }) %>
-    </li>
-    <% }); %>
-</ul>
+<% if (products.length > 0) { %>
+  <ul class="list-no-style grid section-bottom-padding">
+    <% products.forEach((product)=> { %>
+      <li class="grid-product">
+        <%- include('./productsGridItem.ejs', { product }) %>
+      </li>
+      <% }); %>
+  </ul>
+<% } else { %>
+  <div class="section-bottom-padding">
+    No products found.
+  </div>
+<% } %>

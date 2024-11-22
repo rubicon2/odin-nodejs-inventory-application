@@ -5,10 +5,8 @@
     <%- include('../partials/nav.ejs') %>
     <div class="container section-top-padding section-bottom-padding">
       <h1><%= category.name %></h1>
-      <% if (locals.products != null && products.length > 0) { %>
-        <h2>Products</h2>
-        <%- include('../partials/productsGrid.ejs', { products }) %>
-      <% }; %>
+      <h2>Products</h2>
+      <%- include('../partials/productsGrid.ejs', { products }) %>
       <% if (isLoggedIn) { %>
         <h2>Settings</h2>
         <div class="settings-buttons">
