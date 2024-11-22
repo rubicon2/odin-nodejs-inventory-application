@@ -13,7 +13,7 @@ const SQL = `
   INSERT INTO users ( username, password_salt, password_hash ) VALUES (
     'lemon',
     '488fd974e96af67e3d41e1b3316712832a7573a0b3d82e263846dd9f274e1065',
-    '86b913d76ca41c07a1144882f13b54d3de95ad895fdd496833bc55eba9fd2777'
+    '4b589abb04717dcc27b3294e2b9a95c01704a1a5b77b7e16dd8acd1da1c9e855'
   ) ON CONFLICT DO NOTHING;
 
   CREATE TABLE IF NOT EXISTS manufacturers (
