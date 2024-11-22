@@ -1,26 +1,34 @@
 import * as db from '../db/queries.mjs';
 
-async function getManufacturers(req, res) {
-  const manufacturers = await db.getAllManufacturers();
-  res.render('manufacturers/manufacturerList', {
-    title: 'Manufacturers',
-    manufacturers,
-    isLoggedIn: req.session.isLoggedIn,
-  });
+async function getManufacturers(req, res, next) {
+  try {
+    const manufacturers = await db.getAllManufacturers();
+    res.render('manufacturers/manufacturerList', {
+      title: 'Manufacturers',
+      manufacturers,
+      isLoggedIn: req.session.isLoggedIn,
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
-async function getManufacturer(req, res) {
-  const { id } = req.params;
-  const [manufacturer, products] = await Promise.all([
-    db.getManufacturer(id),
-    db.getAllProductsForManufacturer(id),
-  ]);
-  res.render('manufacturers/manufacturer', {
-    title: 'A singular manufacturer',
-    manufacturer,
-    products,
-    isLoggedIn: req.session.isLoggedIn,
-  });
+async function getManufacturer(req, res, next) {
+  try {
+    const { id } = req.params;
+    const [manufacturer, products] = await Promise.all([
+      db.getManufacturer(id),
+      db.getAllProductsForManufacturer(id),
+    ]);
+    res.render('manufacturers/manufacturer', {
+      title: 'A singular manufacturer',
+      manufacturer,
+      products,
+      isLoggedIn: req.session.isLoggedIn,
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
 function getNewManufacturerForm(req, res, next) {

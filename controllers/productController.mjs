@@ -1,28 +1,36 @@
 import * as db from '../db/queries.mjs';
 
-async function getProducts(req, res) {
-  const products = await db.getAllProducts();
-  res.render('products/productList', {
-    title: 'Products',
-    products,
-    isLoggedIn: req.session.isLoggedIn,
-  });
+async function getProducts(req, res, next) {
+  try {
+    const products = await db.getAllProducts();
+    res.render('products/productList', {
+      title: 'Products',
+      products,
+      isLoggedIn: req.session.isLoggedIn,
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
-async function getProduct(req, res) {
-  const { id } = req.params;
-  const [product, categories, images] = await Promise.all([
-    db.getProduct(id),
-    db.getAllCategoriesForProduct(id),
-    db.getAllImagesForProduct(id),
-  ]);
-  res.render('products/product', {
-    title: 'A singular product',
-    product,
-    categories,
-    images,
-    isLoggedIn: req.session.isLoggedIn,
-  });
+async function getProduct(req, res, next) {
+  try {
+    const { id } = req.params;
+    const [product, categories, images] = await Promise.all([
+      db.getProduct(id),
+      db.getAllCategoriesForProduct(id),
+      db.getAllImagesForProduct(id),
+    ]);
+    res.render('products/product', {
+      title: 'A singular product',
+      product,
+      categories,
+      images,
+      isLoggedIn: req.session.isLoggedIn,
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
 async function getNewProductForm(req, res, next) {

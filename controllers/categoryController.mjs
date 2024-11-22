@@ -1,26 +1,34 @@
 import * as db from '../db/queries.mjs';
 
-async function getCategories(req, res) {
-  const categories = await db.getAllCategories();
-  res.render('categories/categoryList', {
-    title: 'Categories',
-    categories,
-    isLoggedIn: req.session.isLoggedIn,
-  });
+async function getCategories(req, res, next) {
+  try {
+    const categories = await db.getAllCategories();
+    res.render('categories/categoryList', {
+      title: 'Categories',
+      categories,
+      isLoggedIn: req.session.isLoggedIn,
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
-async function getCategory(req, res) {
-  const { id } = req.params;
-  const [category, products] = await Promise.all([
-    db.getCategory(id),
-    db.getAllProductsInCategory(id),
-  ]);
-  res.render('categories/category', {
-    title: 'A singular category',
-    category,
-    products,
-    isLoggedIn: req.session.isLoggedIn,
-  });
+async function getCategory(req, res, next) {
+  try {
+    const { id } = req.params;
+    const [category, products] = await Promise.all([
+      db.getCategory(id),
+      db.getAllProductsInCategory(id),
+    ]);
+    res.render('categories/category', {
+      title: 'A singular category',
+      category,
+      products,
+      isLoggedIn: req.session.isLoggedIn,
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
 async function getNewCategoryForm(req, res, next) {
