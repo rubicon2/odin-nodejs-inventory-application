@@ -9,15 +9,17 @@
         <h2>Products</h2>
         <%- include('../partials/productsGrid.ejs', { products }) %>
       <% }; %>
-      <h2>Settings</h2>
-      <div class="settings-buttons">
-        <a href="/category/<%= category.id %>/edit">
-          <button type="button">Edit</button>
-        </a>
-        <form action="/category/<%= category.id %>/delete" method="post">
-          <button type="submit">Delete</button>
-        </form>
-      </div>
+      <% if (isLoggedIn) { %>
+        <h2>Settings</h2>
+        <div class="settings-buttons">
+          <a href="/category/<%= category.id %>/edit">
+            <button type="button">Edit</button>
+          </a>
+          <form action="/category/<%= category.id %>/delete" method="post">
+            <button type="submit">Delete</button>
+          </form>
+        </div>
+      <% } %>
     </div>
   </body>
 </html>

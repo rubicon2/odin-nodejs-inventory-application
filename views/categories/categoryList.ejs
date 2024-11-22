@@ -12,7 +12,9 @@
           </li>
         <% }) %>
       </ul>
-      <a href="/category/new">Add a new category</a>
+      <% if (isLoggedIn) { %>
+        <a href="/category/new">Add a new category</a>
+      <% } %>
     </div>
   </body>
 </html>
