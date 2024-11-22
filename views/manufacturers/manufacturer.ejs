@@ -19,12 +19,14 @@
       <% } else { %>
         <div>No products found.</div>
       <% }; %>
+      <% if (isLoggedIn) { %>
       <h2>Settings</h2>
       <div class="settings-buttons">
         <a href="/manufacturer/<%= manufacturer.id %>/edit">
           <button type="button">Edit</button>
         </a>
       </div>
+      <% } %>
     </div>
   </body>
 </html>

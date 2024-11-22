@@ -12,7 +12,9 @@
           </li>
           <% }) %>
       </ul>
-      <a href="/manufacturer/new">Add a new manufacturer</a>
+      <% if (isLoggedIn) { %>
+        <a href="/manufacturer/new">Add a new manufacturer</a>
+      <% } %>
     </div>
   </body>
 </html>
