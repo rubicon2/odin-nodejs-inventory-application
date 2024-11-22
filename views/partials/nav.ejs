@@ -10,6 +10,13 @@
       <li>
         <a href="/manufacturer">Manufacturers</a>
       </li>
+      <li>
+        <% if (!isLoggedIn) { %>
+          <a href="/account/login">Login</a>
+        <% } else { %>
+          <a href="/account/logout">Logout</a>
+        <% } %>
+      </li>
     </ul>
   </div>
 </nav>
