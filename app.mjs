@@ -7,7 +7,6 @@ import accountRouter from './routes/accountRouter.mjs';
 import productRouter from './routes/productRouter.mjs';
 import manufacturerRouter from './routes/manufacturerRouter.mjs';
 import categoryRouter from './routes/categoryRouter.mjs';
-import * as db from './db/queries.mjs';
 import pool from './db/pool.mjs';
 
 const PORT = process.env.PORT || 8000;
