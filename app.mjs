@@ -50,24 +50,20 @@ app.get('/', async (req, res) => {
 
 // If no prior routes have been matched, show 404.
 app.use((req, res) => {
-  res
-    .status(404)
-    .render('404', {
-      title: '404 - page not found',
-      isLoggedIn: req.session.isLoggedIn,
-    });
+  res.status(404).render('404', {
+    title: '404 - page not found',
+    isLoggedIn: req.session.isLoggedIn,
+  });
 });
 
 // Error handling.
 app.use((error, req, res, next) => {
   console.error(error);
-  res
-    .status(500)
-    .render('error', {
-      title: 'Error',
-      isLoggedIn: req.session.isLoggedIn,
-      error,
-    });
+  res.status(500).render('error', {
+    title: 'Error',
+    isLoggedIn: req.session.isLoggedIn,
+    error,
+  });
 });
 
 app.listen(PORT, () => console.log('Server listening on port', PORT));
