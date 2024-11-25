@@ -57,12 +57,3 @@ The internet seems to be less sure whether peppering a password provides any ben
 password hash "secret sauce" not stored in the database would make it harder for anyone that manages to gain access
 to the database to work out passwords? They would have to not only gain access to the database, but the server secrets
 too.
-
-## To do
-
-- Replace in-built express-session store with an actual store since, as per the npmjs page: "The default server-side session storage, MemoryStore, is purposely not designed for a production environment. It will leak memory under most conditions, does not scale past a single process, and is meant for debugging and developing."
-- Actually do whatever you are supposed to do clientside when a user logs in.
-Give the client some kind of session token, that tells the server which user they are communicating with?
-Currently, all the server knows is that that particular client/session is logged in - nothing about their identity.
-So for instance, if I wanted to store a reference to the user id that uploaded an image in the product_images table,
-that wouldn't be possible.
