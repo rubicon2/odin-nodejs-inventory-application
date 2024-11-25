@@ -1,13 +1,14 @@
 import express from 'express';
 import session from 'express-session';
+import connectPgSimple from 'connect-pg-simple';
 import 'dotenv/config';
 
 import accountRouter from './routes/accountRouter.mjs';
 import productRouter from './routes/productRouter.mjs';
 import manufacturerRouter from './routes/manufacturerRouter.mjs';
 import categoryRouter from './routes/categoryRouter.mjs';
-
 import * as db from './db/queries.mjs';
+import pool from './db/pool.mjs';
 
 const PORT = process.env.PORT || 8000;
 const SESSION_SECRET = process.env.SESSION_SECRET;
@@ -19,8 +20,13 @@ app.use('/uploads', express.static('uploads'));
 app.use(express.urlencoded({ extended: true }));
 
 // Set up session for logging in/out.
+const pgSimpleStore = new connectPgSimple(session);
+
 app.use(
   session({
+    store: new pgSimpleStore({
+      pool,
+    }),
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
